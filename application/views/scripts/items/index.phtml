@@ -1,0 +1,114 @@
+<?php
+/**
+ * PEKO-M Dashboard
+ *
+ * @package		dashboard
+ * @subpackage	templates
+ * @copyright	Copyright (c) 2011+ PEKO-M
+ * @since		1.0 Alpha
+ * @version		$Id$
+ */
+?>
+<script type="text/javascript" charset="utf-8"> 
+	$(document).ready(function() {
+		fnElementsInit();
+		fnDatatableInit();
+	} );
+</script>
+
+<script type="text/javascript" language="javascript" src="/js/jquery.timers-1.2.js"></script>
+
+<script type="text/javascript" language="javascript" src="/js/dashboard.items.init.js"></script>
+<script type="text/javascript" language="javascript" src="/js/dashboard.items.datatable.js"></script>
+<script type="text/javascript" language="javascript" src="/js/dashboard.items.buttons.js"></script>
+
+<style type="text/css">
+    .sf-right-aligned { text-align: right; }
+    .sf-centered { text-align: center; }
+    .sf-red { color: red; }
+    .sf-input-number { text-align: right; }
+    .sf-line { display: block; width: 100%; }
+</style>
+
+<style type="text/css">
+    #dialog-form label { width: 7.5em; float: left; text-align: right; margin-right: 0.5em; margin-top: 6px; padding-top: .4em; }
+    #dialog-form input { width: 20em; float: left; margin-top: 6px; margin-bottom: 6px; padding: .4em; }
+
+    #dialog-sell label { width: 7.5em; float: left; text-align: right; margin-right: 0.5em; margin-top: 6px; padding-top: .4em; }
+    #dialog-sell input { width: 20em; float: left; margin-top: 6px; margin-bottom: 6px; padding: .4em; }
+
+    .dialog-tips { border: 1px solid transparent; padding: 0.3em; }
+    .ui-dialog .ui-state-error { padding: .3em; }
+</style>
+
+<style>
+    .ui-autocomplete-loading { background: white url('/images/ui-anim_basic_16x16.gif') right center no-repeat; }
+    .ui-datepicker-trigger { padding-left: .4em; }
+</style>
+
+<div id="itemsToolbar">
+	<form>
+		<div id="tabClients">
+<!-- Сюда будут вставлятся буттоны с лейбелами яваскриптом -->
+		</div>
+	</form>
+</div>
+
+<div class="ui-widget">
+    <table id="itemsTable" cellpadding="0" cellspacing="0" border="0" class="display">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Дата</th>
+                <th>Бумага</th>
+                <th>Количество</th>
+                <th>Баланс</th>
+                <th>Баланс</th>
+                <th>Налог</th>
+                <th>Налог</th>
+                <th>Котировка</th>
+                <th>Стоимость</th>
+                <th>%% баланс</th>
+                <th>%% налог</th>
+                <th>Текущая цель</th>
+            </tr>
+        </thead>
+    </table>	  
+</div>
+
+<div id="dialog-delete" title="Удаление">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Текст диалога</p>
+</div>
+
+<div id="dialog-form">
+	<p class="dialog-tips">Все поля должны быть заполнены</p>
+
+	<form>
+	<fieldset>
+        <label for="itemBoughtDate">Дата партии:</label><input type="text" name="itemBoughtDate" id="itemBoughtDate" class="ui-widget-content ui-corner-all" />
+        <label for="assetName">Бумага:</label><input type="text" name="assetName" id="assetName" class="ui-widget-content ui-corner-all" />
+        <label for="itemAmount">Количество:</label><input type="text" name="itemAmount" id="itemAmount" class="ui-widget-content ui-corner-all sf-input-number" />
+        <label for="itemBalanceSum">Баланс. ст-ть:</label><input type="text" name="itemBalanceSum" id="itemBalanceSum" class="ui-widget-content ui-corner-all sf-input-number" />
+        <label for="itemTaxSum">Налог. ст-ть:</label><input type="text" name="itemTaxSum" id="itemTaxSum" class="ui-widget-content ui-corner-all sf-input-number" />
+        <label for="itemBuyReason">Цель покупки:</label><input type="text" name="itemBuyReason" id="itemBuyReason" class="ui-widget-content ui-corner-all" />
+	</fieldset>
+	</form>
+</div>
+
+<div id="dialog-sell" title="Продажа">
+	<p class="dialog-tips">Все поля должны быть заполнены</p>
+
+	<form>
+	<fieldset>
+        <label for="itemSellDate">Дата продажи:</label><input type="text" name="itemSellDate" id="itemSellDate" class="ui-widget-content ui-corner-all" />
+        <label for="itemSellAmount">Количество:</label><input type="text" name="itemSellAmount" id="itemSellAmount" class="ui-widget-content ui-corner-all sf-input-number" />
+        <label for="itemSellSum">Стоимость:</label><input type="text" name="itemSellSum" id="itemSellSum" class="ui-widget-content ui-corner-all sf-input-number" />
+        <label for="itemSellReason">Цель продажи:</label><input type="text" name="itemSellReason" id="itemSellReason" class="ui-widget-content ui-corner-all" />
+	</fieldset>
+	</form>
+</div>
+
+<button id="add-item" onClick="fnButtonAdd();"<?php if (!$this->acl->isAllowed($this->auth->getIdentity()->userRole, 'items', 'add')) echo ' class="privilege-disabled"'; ?>>Добавить</button>
+<button id="update-item" onClick="fnButtonUpdate();"<?php if (!$this->acl->isAllowed($this->auth->getIdentity()->userRole, 'items', 'update')) echo ' class="privilege-disabled"'; ?>>Изменить</button>
+<button id="sell-item" onClick="fnButtonSell();"<?php if (!$this->acl->isAllowed($this->auth->getIdentity()->userRole, 'items', 'sell')) echo ' class="privilege-disabled"'; ?>>Продать</button>
+<button id="delete-item" onClick="fnButtonDelete();"<?php if (!$this->acl->isAllowed($this->auth->getIdentity()->userRole, 'items', 'delete')) echo ' class="privilege-disabled"'; ?>>Удалить</button>

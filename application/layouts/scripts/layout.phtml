@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>PEKO-M Trading Dashboard</title>
+<script type="text/javascript" language="javascript" src="/js/jquery-1.5.1.js"></script> 
+<script type="text/javascript" language="javascript" src="/js/jquery.dataTables.js"></script> 
+<script type="text/javascript" language="javascript" src="/js/jquery-ui.js"></script>
+<script type="text/javascript" language="javascript" src="/js/jquery.format.js"></script>
+<script type="text/javascript" language="javascript" src="/js/dashboard.common.js"></script>
+<link rel="stylesheet" href="/css/redmond/jquery-ui.css" type="text/css" media="all" /> 
+<link rel="stylesheet" href="/css/datatable.css" type="text/css" media="all" />
+<style type="text/css">
+    #sf-header { width: 100%; margin-bottom: 20px; }
+    #sf-footer { width: 100%; margin-top: 20px; }
+</style>
+</head>
+<body style="font-size: 12px;">
+	<table id="sf-header" class="ui-widget" border="1" cellpadding="0" cellspacing="0">
+	<caption class="ui-widget-header">PEKO-M Trading Dashboard</caption>
+	<tbody>
+	<tr class="ui-widget-content">
+		<td><a href="/items">Партии</a></td>
+		<td><a href="/assets">Активы</a></td>
+		<td><a href="/quotes">Котировки</a></td>
+		<td style="text-align: right;" >
+<?php if ($this->auth->hasIdentity()) : ?>
+			Пользователь:&nbsp;<?php echo $this->escape($this->auth->getIdentity()->userName); ?>&nbsp;(<?php echo $this->escape($this->auth->getIdentity()->userRole); ?>)&nbsp;<a href="/login/logout">Выйти</a>
+<?php else : ?>
+			<a href="/login">Войти в систему</a>
+<?php endif; ?>
+		</td>
+	</tr>
+	</tbody>
+	</table>
+<?php echo $this->layout()->content ?>
+	<div id="sf-footer">&copy;SantaFox 2011</div>
+</body>
+</html>
