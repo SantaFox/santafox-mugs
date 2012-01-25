@@ -21,7 +21,13 @@ class CountriesController extends Zend_Controller_Action {
      * Действие контроллера - стандартный пустой обработчик /index
      */
 	public function indexAction() {
-
+		// Читаем ACL из модели и отдаем его шаблону, чтобы он заблокировал недоступные кнопки.
+		// Но как-то это кривовато, надо придумать что-нибудь поэлегантнее.
+		$this->view->acl = Application_Model_Acl::getACL();
+		
+		// Получаем список стран и вызываем модель
+        $countriesTable = new Application_Model_DbTable_Countries();
+        $this->view->countries = $countriesTable->getCountries();
 	}
 
     /**
