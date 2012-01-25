@@ -20,6 +20,18 @@ class ErrorController extends Zend_Controller_Action {
 
     public function errorAction()
     {
+    
+    	// Ensure the default view suffix is used so we always return good 
+        // content
+        $this->_helper->viewRenderer->setViewSuffix('phtml');
+        
+        // use shiny exception handler view, if configured as:
+        // resources.frontController.errorview = shiny
+        if ($this->getInvokeArg('errorview') && $this->getInvokeArg('errorview') != 'error') {
+            $this->_helper->layout->disableLayout();
+            $this->_helper->viewRenderer($this->getInvokeArg('errorview'));
+        }
+
         $errors = $this->_getParam('error_handler');
         
         switch ($errors->type) {
@@ -47,6 +59,13 @@ class ErrorController extends Zend_Controller_Action {
         if ($this->getInvokeArg('displayExceptions') == true) {
             $this->view->exception = $errors->exception;
         }
+        
+        // pass the environment to the view script so we can conditionally 
+        // display more/less information
+        $this->view->env       = $this->getInvokeArg('env'); 
+        
+        // pass the actual exception object to the view
+        $this->view->exception = $errors->exception; 
         
         $this->view->request   = $errors->request;
     }
