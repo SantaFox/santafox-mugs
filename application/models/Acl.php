@@ -39,8 +39,7 @@ class Application_Model_Acl {
 			// Создаем роли
 			self::$_acl->addRole( new Zend_Acl_Role('guest') );					// Используется для неавторизованных пользователей
 			self::$_acl->addRole( new Zend_Acl_Role('viewer') );
-			self::$_acl->addRole( new Zend_Acl_Role('trader'), 'viewer');
-			self::$_acl->addRole (new Zend_Acl_Role('admin'), 'trader');
+			self::$_acl->addRole (new Zend_Acl_Role('admin'), 'viewer');
  
 			// Создаем общедоступные ресурсы
 			self::$_acl->addResource( new Zend_Acl_Resource('login') );

@@ -1,10 +1,10 @@
 <?php
 /**
- * PEKO-M Dashboard
+ * StarbucksMugs
  *
- * @package		dashboard
+ * @package		site
  * @subpackage	controllers
- * @copyright	Copyright (c) 2011+ PEKO-M
+ * @copyright	Copyright (c) 2012+ SantaFox
  * @since		1.0 Alpha
  * @version		$Id: ErrorController.php 168 2011-03-07 21:02:02Z santafox $
  */
