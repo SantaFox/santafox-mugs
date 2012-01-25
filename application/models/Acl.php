@@ -1,11 +1,11 @@
 <?php
 /**
- * PEKO-M Dashboard
+ * StarbucksMugs
  *
- * @package		dashboard
+ * @package		site
  * @subpackage	models
- * @copyright	Copyright (c) 2011+ PEKO-M
- * @since		1.0 Beta
+ * @copyright	Copyright (c) 2012+ SantaFox
+ * @since		1.0 Alpha
  * @version		$Id: Acl.php 169 2011-03-08 09:01:11Z santafox $
  */
 
@@ -14,7 +14,7 @@
  *
  * Потенциально позволяет читать ее из базы вместо построения в коде
  *
- * @package		dashboard
+ * @package		site
  * @subpackage	models
  */
 class Application_Model_Acl {
@@ -38,39 +38,43 @@ class Application_Model_Acl {
  
 			// Создаем роли
 			self::$_acl->addRole( new Zend_Acl_Role('guest') );					// Используется для неавторизованных пользователей
-			self::$_acl->addRole( new Zend_Acl_Role('viewer') );
-			self::$_acl->addRole (new Zend_Acl_Role('admin'), 'viewer');
+			self::$_acl->addRole( new Zend_Acl_Role('user') );					// Авторизованный пользователь (не наследуется от гостя)
+			self::$_acl->addRole (new Zend_Acl_Role('admin'), 'user');
  
-			// Создаем общедоступные ресурсы
-			self::$_acl->addResource( new Zend_Acl_Resource('login') );
-
 			// Создаем основные рабочие ресурсы 
-			self::$_acl->addResource( new Zend_Acl_Resource('items') );
-			self::$_acl->addResource( new Zend_Acl_Resource('assets') );
-			self::$_acl->addResource( new Zend_Acl_Resource('quotes') );
+			self::$_acl->addResource( new Zend_Acl_Resource('countries') );
+			self::$_acl->addResource( new Zend_Acl_Resource('series') );
+			self::$_acl->addResource( new Zend_Acl_Resource('mugs') );
+			self::$_acl->addResource( new Zend_Acl_Resource('users') );
 
 			// Создаем служебные ресурсы для AJAX
-			self::$_acl->addResource( new Zend_Acl_Resource('clients') );
+			self::$_acl->addResource( new Zend_Acl_Resource('ajax') );
 			
-			// Создаем непонятные ресурсы (может потом разберусь зачем они
+			// Создаем непонятные ресурсы (может потом разберусь, зачем они)
  			self::$_acl->addResource( new Zend_Acl_Resource('index') );
 			self::$_acl->addResource( new Zend_Acl_Resource('error') );
+			
+			// Создаем админские ресурсы
+			self::$_acl->addResource( new Zend_Acl_Resource('admin') );
 
 			// Прописываем непосредственно правила доступа
 			self::$_acl->deny();
 
 			self::$_acl->allow(null, 'error', 'error');							// На эту страницу могут получить доступ все
 
-			self::$_acl->allow('guest', 'login', 'index');						// Неавторизованный пользователь может только влогиниваться
+			self::$_acl->allow('guest',											// Неавторизованные пользователи видят сайт,
+							   array('countries', 'series', 'mugs'),
+							   array('index', 'data') )
+					   ->allow('guest', 'users', 'profile')						// профили пользователей
+					   ->allow('guest', 'users',								// и регистрацию/логин
+					   		   array('register', 'login') );
 
-			self::$_acl->allow('viewer',
-							   array('items', 'assets', 'quotes'),
-							   array('index', 'data'))
-					   ->allow('viewer', 'clients', 'list')
-					   ->allow('viewer', 'login', 'logout');
+			self::$_acl->allow('user', 'users', 'logout')						// Авторизованные пользователи вылогиниваются
+					   ->deny('user', 'users',									// и не могут заново зарегестрироваться
+					   		   array('register', 'login') );
 			
-			self::$_acl->allow('trader', 'items',
-							   array('add', 'update', 'delete', 'sell'));
+			self::$_acl->allow('admin', 'admin',								// Исключительно админские ресурсы
+							   array('index') );
 		}
  
 		return self::$_acl;

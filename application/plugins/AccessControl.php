@@ -1,18 +1,18 @@
 <?php
 /**
- * PEKO-M Dashboard
+ * StarbucksMugs
  *
- * @package		dashboard
+ * @package		site
  * @subpackage	plugins
- * @copyright	Copyright (c) 2011+ PEKO-M
- * @since		1.0 Beta
+ * @copyright	Copyright (c) 2012+ SantaFox
+ * @since		1.0 Alpha
  * @version		$Id: AccessControl.php 168 2011-03-07 21:02:02Z santafox $
  */
 
 /**
  * Плагин контроллера для проверки идентификации и прав пользователя
  *
- * @package		dashboard
+ * @package		site
  * @subpackage	plugins
  */
 class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
@@ -34,6 +34,7 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 			$role = $auth->getIdentity()->userRole;
 			$user = $auth->getIdentity()->userName;
 		} else {
+			$user = 'guest';
 			$role = 'guest';										// Я так понимаю, это наименование роли пользователя
 		}
 
@@ -62,6 +63,9 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 		// AJAX + нет логина	- возврат ошибки через стандартный протокол JSON (status/message)
 		// HTTP + есть логин	- переадресация на /index/index
 		// HTTP + нет логина	- переадресация на /login/index
+		
+		// Так как здесь не требуется такая система безопасности, как в других проектах, то распиcываем ее заново
+		
 	    if ( !$acl->isAllowed($role, $resource, $privilege) ) {
 			if ( $isAjax ) {										// Если вызов AJAX, то в обоих случаях действуем вот так
 				$log->debug("AccessControl: {$module}/{$controller}/{$privilege} not allowed for AJAX call from " . ( ( 'guest' == $role ) ? "unauthorized user" : "user {$user} ({$role})") );
@@ -72,7 +76,7 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 				$jsonHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Json');
 				$jsonHelper->sendJson( $result );
 				// $request->setDispatched(false);					// Не знаю, нужно это или нет
-			} elseif ( !$role == 'guest' ) {						// Есть логин и роль
+			} elseif ( !$role == 'guest' ) {						// Есть логин и роль, то есть пользователям нельзя
 				$log->debug("AccessControl: {$module}/{$controller}/{$privilege} not allowed for user {$user} ({$role}), redirected to default/index/index");
 				$request->setModuleName('default')
 						->setControllerName('index')

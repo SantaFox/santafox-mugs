@@ -15,7 +15,7 @@
  * @package		site
  * @subpackage	controllers
  */
-class ClientsController extends Zend_Controller_Action {
+class CountriesController extends Zend_Controller_Action {
 
     /**
      * Действие контроллера - стандартный пустой обработчик /index
