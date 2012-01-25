@@ -4,21 +4,6 @@ JavaScript:
 URL:        http://code.jquery.com/jquery-1.4.4.js
 Файлы:      public/js/jquery-1.4.4.js
 
-Библиотека: jQuery Datatables версии 1.7.5
-URL:        http://datatables.net/releases/DataTables-1.7.5.zip
-Файлы:      public/js/jquery.dataTables.js
-            public/css/demo_table_jui.css
-            public/css/demo_table.css
-            public/images/back_disabled.jpg
-            public/images/back_enabled.jpg
-            public/images/forward_disabled.jpg
-            public/images/forward_enabled.jpg
-            public/images/sort_asc.png
-            public/images/sort_asc_disabled.png
-            public/images/sort_both.png
-            public/images/sort_desc.png
-            public/images/sort_desc_disabled.png
-
 Библиотека: jQuery UI версии 1.8.10
 URL:        http://jquery-ui.googlecode.com/files/jquery-ui-1.8.10.zip
 			http://jquery-ui.googlecode.com/files/jquery-ui-themes-1.8.10.zip
@@ -29,12 +14,8 @@ URL:        http://jquery-ui.googlecode.com/files/jquery-ui-1.8.10.zip
 URL:		https://github.com/asual/jquery-format
 Файлы:		public/js/jquery.format.js
 
-Библиотека:	jQuery.Timers версии 1.2
-URL:		http://plugins.jquery.com/project/timers
-Файлы:		pulbic/js/jquery.timers-1.2.js
-
 PHP:
 
-Библиотека:	ZEND Framework версии 1.11.3
-URL:		http://framework.zend.com/releases/ZendFramework-1.11.3/ZendFramework-1.11.3.zip
-Файлы:		/usr/src/zend
+Библиотека:	ZEND Framework версии 1.11.11
+URL:		http://framework.zend.com/releases/ZendFramework-1.11.11/ZendFramework-1.11.11-minimal.zip
+Файлы:		library/Zend
