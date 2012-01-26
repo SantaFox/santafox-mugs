@@ -43,9 +43,14 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
      */
 	public function getCountries() {
 		$select = $this->select()
+		               ->setIntegrityCheck(false)      // Странная идея, надо доразобраться
 					   ->from('countries',
 							  array('id',
 									'countryName'))
+					   ->join('mugs',
+					   		  'countries.id = mugs.mugCountryId',
+					   		  array('mugsCount' => 'COUNT(*)'))
+					   ->group('countries.id')
     				   ->order('countryName');
 
     	return $this->fetchAll($select);

@@ -64,7 +64,7 @@ class Application_Model_Acl {
 
 			self::$_acl->allow('guest',											// Неавторизованные пользователи видят сайт,
 							   array('countries', 'series', 'mugs'),
-							   array('index', 'data') )
+							   array('index', 'list') )
 					   ->allow('guest', 'users', 'profile')						// профили пользователей
 					   ->allow('guest', 'users',								// и регистрацию/логин
 					   		   array('register', 'login') );

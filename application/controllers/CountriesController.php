@@ -31,7 +31,7 @@ class CountriesController extends Zend_Controller_Action {
 	}
 
     /**
-     * (AJAX) Действие контроллера - получение списка активных клиентов
+     * (AJAX) Действие контроллера - получение списка активных стран
      *
 	 * В запросе не требуется никакая информация. Вызывается модель, возвращающая <b>Zend_Db_Rowset</b>,
 	 * который потом конвертируется в ассоциативный массив формата "Имя столбца" => "Значение".
@@ -53,15 +53,15 @@ class CountriesController extends Zend_Controller_Action {
 		// Сначала предотвратим некорректный вызов процедуры
         $isAjax = $request->isXmlHttpRequest();
         if (!$isAjax) {
-            $log->alert('Попытка вызова clients/list напрямую, без AJAX');
+            $log->alert('Попытка вызова countries/list напрямую, без AJAX');
             die();
         }
         
         // Получаем код клиента из запроса и вызываем модель
-        $itemClientsTable = new Application_Model_DbTable_ItemClients();
-        $result = $itemClientsTable->getActiveClients();
+        $countriesTable = new Application_Model_DbTable_Countries();
+        $result = $countriesTable->getCountries();
         
-        $log->info("Был вызван clients/list напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
+        $log->info("Был вызван countries/list напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
 
         $this->_helper->json($result->toArray());
 	}
