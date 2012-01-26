@@ -52,12 +52,6 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 			$resource = $module . ':' . $controller;				// Или, в редком случае, Модуль:Контроллер
 
 		$privilege = $request->getActionName();						// Имя действия - это как раз привилегия для ACL
-
-		// Итак, момент истины. Варианты отработки запрета доступа следующие:
-		// AJAX + есть логин	- возврат ошибки через стандартный протокол JSON (status/message)
-		// AJAX + нет логина	- возврат ошибки через стандартный протокол JSON (status/message)
-		// HTTP + есть логин	- переадресация на /index/index
-		// HTTP + нет логина	- переадресация на /login/index
 		
 		// Так как здесь не требуется такая система безопасности, как в других проектах, то распиcываем ее заново
 		
@@ -71,26 +65,21 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 				$jsonHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Json');
 				$jsonHelper->sendJson( $result );
 				// $request->setDispatched(false);					// Не знаю, нужно это или нет
-			} elseif ( !$role == 'guest' ) {						// Есть логин и роль, то есть пользователям нельзя
+			} else {
 				$log->debug("AccessControl: {$module}/{$controller}/{$privilege} not allowed for user {$user} ({$role}), redirected to default/index/index");
 
 				// not enough privilege
 				$error = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-				$error->type = self::UNAUTHORIZED_ACCESS;
-				$error->request = clone $req;
+				$error->type = 'UNAUTHORIZED_ACCESS';
+				$error->request = clone $request;
 				$error->exception = new Zend_Acl_Exception('Access Denied', 403);
-				$req->setControllerName('error')
+				$request->setControllerName('error')
 						->setActionName('error')
 						->setParams(array(
 								'error_handler' => $error,
-								'returnUrl' => urlencode($req->getRequestUri())
+								'returnUrl' => urlencode($request->getRequestUri())
 						))
 						->setDispatched(false);
-			} else {												// Нет логина, значит направляем на страницу регистрации
-				$log->debug("AccessControl: {$module}/{$controller}/{$privilege} not allowed for guest (not logged in), redirected to default/login/index");
-				$request->setModuleName('default')
-						->setControllerName('login')
-						->setActionName('index');
 			}
 		} else {
 			$log->debug("AccessControl: {$module}/{$controller}/{$privilege} allowed for user $user ({$role})");
@@ -103,33 +92,4 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 		}
 	}
 }
-/*
-	http://stackoverflow.com/questions/3421761/zend-framework-predispatch-acl-plugin-causes-requests-to-non-existent-page-to-ac
 
-	if (!$acl->isAllowed($role, $resource, $privilege)) {
-		$redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('Redirector');
-		if (!$auth->hasIdentity()) {
-			// login required
-			$flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-			$flashMessenger->addMessage('You need to login first');
-			$redirector->gotoSimple('login', 'auth', 'default', array(
-													'returnUrl' => urlencode($req->getRequestUri())
-													));
-
-		} else {
-			// not enough privilege
-			$error = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-			$error->type = self::UNAUTHORIZED_ACCESS;
-			$error->request = clone $req;
-			$error->exception = new Zend_Acl_Exception('Access Denied', 403);
-			$req->setControllerName('error')
-					->setActionName('error')
-					->setParams(array(
-							'error_handler' => $error,
-							'returnUrl' => urlencode($req->getRequestUri())
-					))
-					->setDispatched(false);
-		}
-	}
-
-*/

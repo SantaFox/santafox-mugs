@@ -27,4 +27,33 @@ class AdminController extends Zend_Controller_Action {
 		$this->view->acl = Application_Model_Acl::getACL();
     }
 
+	/**
+	 * Действие контроллера - обработка списка кружек с сайта Википедии
+	 *
+	 */
+	public function acquireAction() {
+		//$url='www.zend.com';
+		//$client = new Zend_Http_Client($url);
+		//$response = $client->request();
+		//$html = $response->getBody();
+	
+		$listFile = '/Applications/MAMP/htdocs/Starbucks_City_Mugs.html';
+		$html = file_get_contents($listFile);
+		
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+		
+		echo $html;
+/*
+		$dom = new Zend_Dom_Query($html);
+	    $results = $dom->query('h2');
+    	$count = count($results); // получение числа соответствий: 4
+    	foreach ($results as $result) {
+        	// переменная $result имеет тип DOMElement
+        	Zend_Debug::dump($result);
+        }
+*/
+
+	}
+
 }

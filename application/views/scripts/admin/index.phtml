@@ -1,1 +1,47 @@
-<h3>Admin</h3>
+<?php ?>
+
+<h2>Countries List</h2>
+<ol id="countries">
+</ol>
+
+<script type="text/javascript">
+
+$(function() {  
+	$.ajax({
+		url: 'admin/acquire',
+		type: 'get',
+		dataType: 'text',
+		success: function(data)
+		{ 
+			// Перед вызовом jQuery(data) стоит стоит очистить текстовую строку data от заголовоков,
+			// к примеру взять только содержимое тега <body>, но сделать это исключительно строковыми
+			// функциями.
+			var html = $(data);
+
+			var s1 = $('span#Countries_\\.26_Cities_Starbucks_Mug_Series', html).parent();	// Элемент-заголовок списка
+			var s2 = s1.nextUntil("h2");
+			$('b', s2).each( function() {
+				var li = $('<li>');
+				li.text( wordToUpper( $(this).text() ) ).appendTo('#countries');
+			});
+
+			//html.find('h2').each( function() {
+			//	var li = $('<li>');
+			//	li.text( $(this).find('span.mw-headline').text() ).appendTo('#countries');
+			//});
+			
+			//do some thing with html eg: _html.find('div').addClass('red')
+			//jQuery('#countries').html(_html);
+		}
+	});
+});
+
+function wordToUpper(strSentence) {
+    return strSentence.toLowerCase().replace(/\b[a-z]/g, convertToUpper);
+ 
+    function convertToUpper() {
+        return arguments[0].toUpperCase();
+    }
+}
+
+</script>
