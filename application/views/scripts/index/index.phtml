@@ -1,17 +1,13 @@
 <?php ?>
 
 <style type="text/css">
-	#tagCloud {  
-      width:290px; background-color:#575454; text-align:center; padding:5px;  
-      overflow:auto; font-family:arial;  
-    }  
-    #tagCloud h2 { color:#ffffff; font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }  
-    
-    #tagList { margin:0; padding:0; }  
-    #tagList li { list-style-type:none; float:left; margin:0 10px; height:35px; text-decoration:none; color:#ffffff;}  
+	#countriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; font-family:arial; }  
+    #countriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
+    #countriesCloud ul { margin:0; padding:0; }  
+    #countriesCloud ul li { list-style-type:none; float:left; margin:0 10px; height:35px;}  
 </style>
 
-<div id="tagCloud">
+<div id="countriesCloud">
 	<h2>Countries</h2>
 </div>
 
@@ -24,7 +20,7 @@ $(function() {
 		var sizeMin = 1.0, sizeMax = 2.0;		// Размеры в .em в пропорции от кол-ва кружек
 
 		// Создаем ненумерованый список
-		$("<ul>").attr("id", "tagList").appendTo("#tagCloud");  
+		$("<ul>").attr("id", "tagList").appendTo("#countriesCloud");  
       
 		// Теперь в цикле создаем теги 
 		$.each(data, function(index, value) { 
@@ -32,17 +28,17 @@ $(function() {
 			var li = $("<li>");  
 
 			// TODO: линк потом заменится на обработку нажатия
-			//$("<a>").text(value.countryName).attr({title:"See all mugs from " + value.countryName, href:"mugs/list/" + value.countryName}).appendTo(li);  
-
+			//$("<a>").text(value.countryName).attr({title:"See all mugs from " + value.countryName, href:"mugs/list/" + value.countryName}).appendTo(li);
+			//$("<a>").text(value.countryName).data("mugsCount", value.mugsCount).appendTo(li);
 			li.text(value.countryName).data("mugsCount", value.mugsCount);
 			if ( value.mugsCount > countMax ) { countMax = value.mugsCount };
 			if ( value.mugsCount < countMin || countMin == 0 ) { countMin = value.mugsCount };
 
-      		li.appendTo("#tagList");  
+      		li.appendTo("#countriesCloud ul");  
 		});
 		
 		if ( countMax > countMin ) {
-			$('#tagList li').each(function(index) {
+			$('#countriesCloud ul li').each(function(index) {
 				var countProportion = ($(this).data("mugsCount") - countMin) / (countMax - countMin);
 				var sizeNew = sizeMin + (sizeMax - sizeMin) * countProportion
 				$(this).animate( {fontSize: sizeNew + 'em'} );

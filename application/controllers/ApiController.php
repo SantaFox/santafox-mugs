@@ -31,6 +31,7 @@ class ApiController extends Zend_Controller_Action {
 	 * JSON возвращает такой массив в виде массива объектов с тремя указанными свойствами.
 	 *
 	 * @uses	Application_Model_DbTable_ItemClients::getActiveClients()
+	 * @todo	ИСПРАВИТЬ ОПИСАНИЕ!!!!
      */
 	public function countriesAction() {
         $log = Zend_Registry::get('log');
