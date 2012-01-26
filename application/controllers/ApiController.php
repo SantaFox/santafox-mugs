@@ -10,25 +10,12 @@
  */
 
 /**
- * Контроллер для операций со странами
+ * Контроллер для всех действий AJAX
  *
  * @package		site
  * @subpackage	controllers
  */
-class CountriesController extends Zend_Controller_Action {
-
-    /**
-     * Действие контроллера - стандартный пустой обработчик /index
-     */
-	public function indexAction() {
-		// Читаем ACL из модели и отдаем его шаблону, чтобы он заблокировал недоступные кнопки.
-		// Но как-то это кривовато, надо придумать что-нибудь поэлегантнее.
-		$this->view->acl = Application_Model_Acl::getACL();
-		
-		// Получаем список стран и вызываем модель
-        $countriesTable = new Application_Model_DbTable_Countries();
-        $this->view->countries = $countriesTable->getCountries();
-	}
+class ApiController extends Zend_Controller_Action {
 
     /**
      * (AJAX) Действие контроллера - получение списка активных стран
@@ -45,7 +32,7 @@ class CountriesController extends Zend_Controller_Action {
 	 *
 	 * @uses	Application_Model_DbTable_ItemClients::getActiveClients()
      */
-	public function listAction() {
+	public function countriesAction() {
         $log = Zend_Registry::get('log');
         
         $request = $this->getRequest();
@@ -66,4 +53,3 @@ class CountriesController extends Zend_Controller_Action {
         $this->_helper->json($result->toArray());
 	}
 }
-

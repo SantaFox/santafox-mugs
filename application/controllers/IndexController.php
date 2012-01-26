@@ -1,6 +1,6 @@
 <?php
 /**
- * StarbuckMugs
+ * StarbucksMugs
  *
  * @package		site
  * @subpackage	controllers
@@ -10,7 +10,7 @@
  */
 
 /**
- * Контроллер для обработки дефолтовых путей приложения
+ * Контроллер для генерации главной страницы приложения
  *
  * @package		site
  * @subpackage	controllers
@@ -20,11 +20,11 @@ class IndexController extends Zend_Controller_Action {
     /**
      * Действие контроллера - стандартный обработчик /index
      *
-     * Производит редирект на основную рабочую страничку {@link CountriesController::indexAction()}.
-     * А вообще, теоретически, может рисовать титульную страничку
      */
     public function indexAction() {
-       	$this->_redirect("/countries");
+		// Читаем ACL из модели и отдаем его шаблону, чтобы он заблокировал недоступные кнопки.
+		// Но как-то это кривовато, надо придумать что-нибудь поэлегантнее.
+		$this->view->acl = Application_Model_Acl::getACL();
     }
 
 }

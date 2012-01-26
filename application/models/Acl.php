@@ -38,20 +38,17 @@ class Application_Model_Acl {
  
 			// Создаем роли
 			self::$_acl->addRole( new Zend_Acl_Role('guest') );					// Используется для неавторизованных пользователей
-			self::$_acl->addRole( new Zend_Acl_Role('user') );					// Авторизованный пользователь (не наследуется от гостя)
+			self::$_acl->addRole( new Zend_Acl_Role('user'), 'guest');
 			self::$_acl->addRole (new Zend_Acl_Role('admin'), 'user');
  
 			// Создаем основные рабочие ресурсы 
-			self::$_acl->addResource( new Zend_Acl_Resource('countries') );
-			self::$_acl->addResource( new Zend_Acl_Resource('series') );
-			self::$_acl->addResource( new Zend_Acl_Resource('mugs') );
+ 			self::$_acl->addResource( new Zend_Acl_Resource('index') );
 			self::$_acl->addResource( new Zend_Acl_Resource('users') );
 
 			// Создаем служебные ресурсы для AJAX
-			self::$_acl->addResource( new Zend_Acl_Resource('ajax') );
+			self::$_acl->addResource( new Zend_Acl_Resource('api') );
 			
 			// Создаем непонятные ресурсы (может потом разберусь, зачем они)
- 			self::$_acl->addResource( new Zend_Acl_Resource('index') );
 			self::$_acl->addResource( new Zend_Acl_Resource('error') );
 			
 			// Создаем админские ресурсы
@@ -62,10 +59,11 @@ class Application_Model_Acl {
 
 			self::$_acl->allow(null, 'error', 'error');							// На эту страницу могут получить доступ все
 
-			self::$_acl->allow('guest',											// Неавторизованные пользователи видят сайт,
-							   array('countries', 'series', 'mugs'),
-							   array('index', 'list') )
-					   ->allow('guest', 'users', 'profile')						// профили пользователей
+			self::$_acl->allow('guest', 'index', 'index')						// Неавторизованные пользователи видят сайт
+					   ->allow('guest', 'api',
+					   		   array('countries') );
+					   		   
+			self::$_acl->allow('guest', 'users', 'profile')						// профили пользователей
 					   ->allow('guest', 'users',								// и регистрацию/логин
 					   		   array('register', 'login') );
 

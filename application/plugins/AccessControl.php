@@ -52,11 +52,6 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 			$resource = $module . ':' . $controller;				// Или, в редком случае, Модуль:Контроллер
 
 		$privilege = $request->getActionName();						// Имя действия - это как раз привилегия для ACL
-		
-		if ( !$acl->has($resource) ) {								// Если такого ресурса в ACL нет,
-			$resource = 'index';									// то проверяем общий доступ к index:index
-			$privilege = 'index';
-		}
 
 		// Итак, момент истины. Варианты отработки запрета доступа следующие:
 		// AJAX + есть логин	- возврат ошибки через стандартный протокол JSON (status/message)
@@ -78,9 +73,19 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 				// $request->setDispatched(false);					// Не знаю, нужно это или нет
 			} elseif ( !$role == 'guest' ) {						// Есть логин и роль, то есть пользователям нельзя
 				$log->debug("AccessControl: {$module}/{$controller}/{$privilege} not allowed for user {$user} ({$role}), redirected to default/index/index");
-				$request->setModuleName('default')
-						->setControllerName('index')
-						->setActionName('index');
+
+				// not enough privilege
+				$error = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+				$error->type = self::UNAUTHORIZED_ACCESS;
+				$error->request = clone $req;
+				$error->exception = new Zend_Acl_Exception('Access Denied', 403);
+				$req->setControllerName('error')
+						->setActionName('error')
+						->setParams(array(
+								'error_handler' => $error,
+								'returnUrl' => urlencode($req->getRequestUri())
+						))
+						->setDispatched(false);
 			} else {												// Нет логина, значит направляем на страницу регистрации
 				$log->debug("AccessControl: {$module}/{$controller}/{$privilege} not allowed for guest (not logged in), redirected to default/login/index");
 				$request->setModuleName('default')
