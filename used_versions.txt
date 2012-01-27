@@ -1,8 +1,8 @@
 JavaScript:
 
-Библиотека: jQuery версии 1.4.4
-URL:        http://code.jquery.com/jquery-1.4.4.js
-Файлы:      public/js/jquery-1.4.4.js
+Библиотека: jQuery версии 1.7.1
+URL:        http://code.jquery.com/jquery-1.7.1.min.js
+Файлы:      public/js/jquery-1.7.1.min.js
 
 Библиотека: jQuery UI версии 1.8.10
 URL:        http://jquery-ui.googlecode.com/files/jquery-ui-1.8.10.zip
