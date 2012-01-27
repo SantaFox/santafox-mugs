@@ -27,11 +27,21 @@ class AdminController extends Zend_Controller_Action {
 		$this->view->acl = Application_Model_Acl::getACL();
     }
 
+    /**
+     * Действие контроллера - стандартный обработчик /acquire
+     *
+     */
+    public function acquireAction() {
+		// Читаем ACL из модели и отдаем его шаблону, чтобы он заблокировал недоступные кнопки.
+		// Но как-то это кривовато, надо придумать что-нибудь поэлегантнее.
+		$this->view->acl = Application_Model_Acl::getACL();
+    }
+
 	/**
-	 * Действие контроллера - обработка списка кружек с сайта Википедии
+	 * Действие контроллера - загрузка списка кружек с сайта Википедии
 	 *
 	 */
-	public function acquireAction() {
+	public function proxyAction() {
 		//$url='www.zend.com';
 		//$client = new Zend_Http_Client($url);
 		//$response = $client->request();
@@ -44,16 +54,6 @@ class AdminController extends Zend_Controller_Action {
 		$this->_helper->viewRenderer->setNoRender();
 		
 		echo $html;
-/*
-		$dom = new Zend_Dom_Query($html);
-	    $results = $dom->query('h2');
-    	$count = count($results); // получение числа соответствий: 4
-    	foreach ($results as $result) {
-        	// переменная $result имеет тип DOMElement
-        	Zend_Debug::dump($result);
-        }
-*/
-
 	}
 
 }

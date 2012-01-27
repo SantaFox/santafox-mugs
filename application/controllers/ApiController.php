@@ -41,7 +41,7 @@ class ApiController extends Zend_Controller_Action {
 		// Сначала предотвратим некорректный вызов процедуры
         $isAjax = $request->isXmlHttpRequest();
         if (!$isAjax) {
-            $log->alert('Попытка вызова countries/list напрямую, без AJAX');
+            $log->alert('Попытка вызова api/countries напрямую, без AJAX');
             die();
         }
         
@@ -49,7 +49,7 @@ class ApiController extends Zend_Controller_Action {
         $countriesTable = new Application_Model_DbTable_Countries();
         $result = $countriesTable->getCountries();
         
-        $log->info("Был вызван countries/list напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
+        $log->info("Был вызван api/countries напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
 
         $this->_helper->json($result->toArray());
 	}

@@ -62,7 +62,7 @@ class Application_Model_Acl {
 			self::$_acl->allow('guest', 'index', 'index')						// Неавторизованные пользователи видят сайт
 					   ->allow('guest', 'api',
 					   		   array('countries') )
-					   ->allow('guest', 'admin', array('index','acquire'));	// временно
+					   ->allow('guest', 'admin', array('index','acquire', 'proxy'));	// временно
 					   		   
 			self::$_acl->allow('guest', 'users', 'profile')						// профили пользователей
 					   ->allow('guest', 'users',								// и регистрацию/логин

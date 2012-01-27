@@ -1,0 +1,118 @@
+<?php ?>
+
+<ol id="tasks">
+	<li id="task1">Загрузка списка стран</li>
+	<li id="task2">Загрузка списка серий</li>
+	<li id="task3">Загрузка списка кружек</li>
+	<li id="task4">Загрузка исходных данных с сайта</li>
+	<li id="task5">Анализ списка стран</li>
+	<li id="task6">Анализ списка серий</li>
+	<li id="task7">Анализ списка кружек</li>
+</ol>
+
+<h2>Countries List</h2>
+<ol id="countries">
+</ol>
+
+<script type="text/javascript">
+
+$(function() {
+	// AJAX manager from here:
+	// http://stackoverflow.com/questions/4785724/queue-ajax-requests-using-jquery-queue
+	var ajaxManager = (function() {
+		var requests = [];
+
+		return {
+			addReq: function(opt) {
+				requests.push(opt);
+			},
+			removeReq: function(opt) {
+				if( $.inArray(opt, requests) > -1 )
+					requests.splice($.inArray(opt, requests), 1);
+			},
+			run: function() {
+				var self = this,
+					orgSuc;
+
+				if( requests.length ) {
+					oriSuc = requests[0].complete;
+
+					requests[0].complete = function() {
+						if( typeof oriSuc === 'function' ) oriSuc();
+						requests.shift();
+						self.run.apply(self, []);
+					};   
+
+					$.ajax(requests[0]);
+				} else {
+					self.tid = setTimeout(function() {
+						self.run.apply(self, []);
+					}, 1000);
+				}
+			},
+			stop: function() {
+				requests = [];
+				clearTimeout(this.tid);
+			}
+		};
+	}());
+
+	ajaxManager.run();
+	
+	var baseCountries = [];
+	var wikiMugs = [];
+	
+	ajaxManager.addReq({
+		url: '/api/countries',
+		dataType: 'json',
+		beforeSend: function() {
+			$('<span>...</span>').appendTo('#task1');
+		},
+		success: function(data) {
+			$.each(data, function(index, value) { 
+				baseCountries.push(value);
+			});
+			$('<span>выполнено</span>').appendTo('#task1');
+		}
+	});
+	
+	ajaxManager.addReq({
+		url: '/admin/proxy',
+		type: 'get',
+		dataType: 'text',
+		beforeSend: function() {
+			$('<span>...</span>').appendTo('#task4');
+		},
+		success: function(data)
+		{ 
+			// Перед вызовом jQuery(data) стоит стоит очистить текстовую строку data от заголовоков,
+			// к примеру взять только содержимое тега <body>, но сделать это исключительно строковыми
+			// функциями.
+			var html = $(data);
+
+			var s1 = $('span#Countries_\\.26_Cities_Starbucks_Mug_Series', html).parent();	// Элемент-заголовок списка
+			var s2 = s1.nextUntil("h2");
+			$('b', s2).each( function() {
+				var currentCountry = $(this).text();
+				
+				var s3 = $(this).parent().nextUntil('p,h2')		// обычно два <ul> с сериями. <h2> требуется в конце списка
+				s3.each( function() {
+					var currentSerie = $('li', this).first().contents()[0].nodeValue.trim();
+					$('li', this).slice(1).each( function() {
+						var newMug = { country: currentCountry, serie: currentSerie, name: $(this).text().trim() };
+						wikiMugs.push( newMug );
+					});
+				});
+			});
+			/*
+			jQuery.each(mugs, function() {
+				var li = $('<li>');
+				li.text(this.country + ' - ' + this.serie + ' - ' + this.name).appendTo('#countries');
+			});
+			*/
+			$('<span>выполнено</span>').appendTo('#task4');
+		}
+	});
+});
+
+</script>
