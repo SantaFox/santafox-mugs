@@ -47,7 +47,7 @@ class ApiController extends Zend_Controller_Action {
         
         // Получаем код клиента из запроса и вызываем модель
         $countriesTable = new Application_Model_DbTable_Countries();
-        $result = $countriesTable->getCountries();
+        $result = $countriesTable->getCountriesCloud();
         
         $log->info("Был вызван api/countries напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
 

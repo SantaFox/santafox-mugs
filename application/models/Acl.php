@@ -60,9 +60,9 @@ class Application_Model_Acl {
 			self::$_acl->allow(null, 'error', 'error');							// На эту страницу могут получить доступ все
 
 			self::$_acl->allow('guest', 'index', 'index')						// Неавторизованные пользователи видят сайт
-					   ->allow('guest', 'api',
+					   ->allow('guest', 'api',									// и ТЕОРЕТИЧЕСКИ имеют доступ к API
 					   		   array('countries') )
-					   ->allow('guest', 'admin', array('index','acquire', 'proxy'));	// временно
+					   ->allow('guest', 'admin', array('index','acquire', 'proxy', 'countries'));	// временно
 					   		   
 			self::$_acl->allow('guest', 'users', 'profile')						// профили пользователей
 					   ->allow('guest', 'users',								// и регистрацию/логин

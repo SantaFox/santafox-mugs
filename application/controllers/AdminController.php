@@ -56,4 +56,40 @@ class AdminController extends Zend_Controller_Action {
 		echo $html;
 	}
 
+    /**
+     * (AJAX) Действие контроллера - получение списка стран для сверки с вики
+     *
+	 * В запросе не требуется никакая информация. Вызывается модель, возвращающая <b>Zend_Db_Rowset</b>,
+	 * который потом конвертируется в ассоциативный массив формата "Имя столбца" => "Значение".
+     * Возвращаются только необходимые поля:
+     * <ul>
+     * <li>id</li>
+     * <li>countryName/li>
+     * <li>countryAcquireAlias</li>
+     * </ul>
+	 * JSON возвращает такой массив в виде массива объектов с тремя указанными свойствами.
+	 *
+	 * @uses	Application_Model_DbTable_Countries::getCountriesForAcquire()
+	 * @todo	ИСПРАВИТЬ ОПИСАНИЕ!!!!
+     */
+	public function countriesAction() {
+        $log = Zend_Registry::get('log');
+        
+        $request = $this->getRequest();
+        
+		// Сначала предотвратим некорректный вызов процедуры
+        $isAjax = $request->isXmlHttpRequest();
+        if (!$isAjax) {
+            $log->alert('Попытка вызова admin/countries напрямую, без AJAX');
+            die();
+        }
+        
+        // Получаем код клиента из запроса и вызываем модель
+        $countriesTable = new Application_Model_DbTable_Countries();
+        $result = $countriesTable->getCountriesForAcquire();
+        
+        $log->info("Был вызван admin/countries напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
+
+        $this->_helper->json($result->toArray());
+	}
 }

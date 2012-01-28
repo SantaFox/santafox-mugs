@@ -28,20 +28,24 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
 	/**#@-*/
 
     /**
-     * Получение списка всех зарегестрированных в системе стран
+     * Получение списка стран для облака
      *
-     * Используется для указания страны пользователя и во всех окнах,
-     * где показывается коллекция
+     * Используется для получения списка стран с количество кружек, при
+     * возможной фильтрации по пользователю и/или серии. Страны с количеством кружек = 0
+     * не возвращаются.
      *
      * Возвращаются только необходимые поля:
      * <ul>
      * <li>id</li>
      * <li>countryName</li>
+     * <li>mugsCount</li>
      * </ul>
 	 *
-     * @return	Zend_Db_Rowset			Результат запроса
+	 * @param	null|string	$userId		id пользователя для фильтрации
+	 * @param	null|string	$serieId	id серии для фильтрации
+	 * @return	Zend_Db_Rowset			Результат запроса
      */
-	public function getCountries() {
+	public function getCountriesCloud($userId = '', $serieId = '') {
 		$select = $this->select()
 		               ->setIntegrityCheck(false)      // Странная идея, надо доразобраться
 					   ->from('countries',
@@ -50,6 +54,35 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
 					   ->join('mugs',
 					   		  'countries.id = mugs.mugCountryId',
 					   		  array('mugsCount' => 'COUNT(*)'))
+					   ->group('countries.id')
+    				   ->order('countryName')
+    				   ->having('mugsCount > 0');
+        
+        if ($serieId != '') {
+            $select->where('mugSerieId = ?', (int)$serieId);
+        }
+    	
+    	return $this->fetchAll($select);
+	}
+
+    /**
+     * Получение списка всех зарегестрированных в системе стран с их синонимами для сравнение с вики
+     *
+     * Возвращаются только необходимые поля:
+     * <ul>
+     * <li>id</li>
+     * <li>countryName</li>
+     * <li>countryAcquireAlias</li>
+     * </ul>
+	 *
+     * @return	Zend_Db_Rowset			Результат запроса
+     */
+	public function getCountriesForAcquire() {
+		$select = $this->select()
+					   ->from('countries',
+							  array('id',
+									'countryName',
+									'countryAcquireAlias'))
 					   ->group('countries.id')
     				   ->order('countryName');
 
