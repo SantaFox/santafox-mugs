@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.9)
 # Database: u310912_starbuck
-# Generation Time: 2012-01-28 20:09:57 +0000
+# Generation Time: 2012-01-30 14:13:20 +0000
 # ************************************************************
 
 
@@ -29,7 +29,7 @@ CREATE TABLE `countries` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `countryName` varchar(50) NOT NULL DEFAULT '',
   `countryAcquireAlias` varchar(50) DEFAULT NULL,
-  `countryDesc` varchar(255) DEFAULT NULL,
+  `countryDesc` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -38,12 +38,12 @@ LOCK TABLES `countries` WRITE;
 
 INSERT INTO `countries` (`id`, `countryName`, `countryAcquireAlias`, `countryDesc`)
 VALUES
-	(1,'Greece','',NULL),
-	(2,'Spain','',NULL),
+	(1,'Greece','','Starbucks celebrated the opening of its first store in Greece in September 2002, with the first store at Korai Street. Greece, a country with a strong coffee tradition welcomed Starbucks with enthusiasm and within a period of five years Starbucks is offering to more and more customers the finest coffee in 56 locations in Athens, Salonica, Volos, Mykonos, Patras, Corfu, Rhodes, Chania and Heraklio of Crete.'),
+	(2,'Spain','','In October 2001 Starbucks initiated plans to open stores in Spain, forming a joint venture company with Grupo Vips, a company with 25 years of experience in the Spanish restaurant and retail sector.\n\nThe two companies shared common culture and company values, both focusing on a commitment to the highest quality product for their clients and a diverse and respectful work environment for their partners.\n\nBy April 2002 Starbucks had successfully entered the Spanish market with the opening of two stores in Madrid. Shortly after, two new stores were opened in Barcelona. Starbucks, thanks to its loyal customers, has grown tremendously; there are currently 75 stores in Spain located in Madrid, Barcelona, Valencia and Sevilla.'),
 	(3,'Belgium','',NULL),
 	(4,'Germany','',NULL),
 	(5,'USA','United States of America',NULL),
-	(6,'Bulgaria','',NULL),
+	(6,'Bulgaria','','In 2008, Starbucks successfully entered the Bulgarian market through a joint venture with the Marinopoulos Group. The two companies share a common culture, focusing on a great commitment to customised coffee, similar company values and a mutual respect for people and the environment. Already they operate stores in Greece, Cyprus, Romania, Switzerland, and Austria.'),
 	(7,'Wales','',NULL),
 	(8,'Thailand','',NULL),
 	(9,'China','',NULL),
@@ -54,7 +54,7 @@ VALUES
 	(14,'Russia','',NULL),
 	(15,'Scotland','',NULL),
 	(16,'Taiwan','',NULL),
-	(17,'Austria','',NULL);
+	(17,'Austria','','Starbucks Coffee Austria GmbH ist für den Aufbau und das Betreiben von Starbucks Coffeehouses in Österreich zuständig. Operativ geführt wird das Geschäft von der Firma Starbucks Coffee Austria GmbH.\n\nStarbucks Coffee Österreich eröffnete im Dezember 2001 das erste Starbucks Coffeehouse in Wien und betreibt aktuell elf Coffeehouses in Wien.');
 
 /*!40000 ALTER TABLE `countries` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -146,16 +146,16 @@ LOCK TABLES `mugs2users` WRITE;
 INSERT INTO `mugs2users` (`id`, `mug_id`, `user_id`, `added_moment`, `added_comment`, `price_paid`, `status`)
 VALUES
 	(1,1,1,'2012-01-26 00:00:00','Привез папа из Греции',NULL,'Own'),
-	(2,2,1,'2012-01-26 00:00:00','Привезла Бабакова Елена из Испании',NULL,'Own'),
+	(2,2,1,'2012-01-26 00:00:00','Привезла Елена Бабакова из Испании',NULL,'Own'),
 	(3,3,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(4,4,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
-	(5,5,1,'2012-01-26 00:00:00','Привезла Бабакова Елена из США',NULL,'Own'),
+	(5,5,1,'2012-01-26 00:00:00','Привезла Елена Бабакова из США',NULL,'Own'),
 	(6,6,1,'2012-01-26 00:00:00','Привезла Ирина Дрождь',NULL,'Own'),
 	(7,7,1,'2012-01-26 00:00:00','Прислал по почте Harrison Lee',NULL,'Own'),
 	(8,8,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(9,9,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(10,10,1,'2012-01-16 00:00:00','Купил сам на Кипре, в Starbucks Paphos',9.35,'Own'),
-	(11,11,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
+	(11,11,1,'2012-01-26 00:00:00','Купил сам на Кипре, в Starbucks Paphos',NULL,'Own'),
 	(12,12,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(13,13,1,'2012-01-16 00:00:00','Купил сам на Кипре, в Starbucks Paphos',9.35,'Own'),
 	(14,14,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
@@ -163,20 +163,20 @@ VALUES
 	(16,16,1,'2012-01-26 00:00:00','Привезла Анна Степанова из США',NULL,'Own'),
 	(17,17,1,'2012-01-26 00:00:00','Привезла Ольга Котина',NULL,'Own'),
 	(18,18,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
-	(19,19,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
+	(19,19,1,'2012-01-26 00:00:00','Привезла Татьяна Петровна из Великобритании',NULL,'Own'),
 	(20,20,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(21,21,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(22,22,1,'2012-01-10 00:00:00','Привез Андрей Дугин из Франции',NULL,'Own'),
 	(23,23,1,'2012-01-26 00:00:00','Купил сам в Москве',NULL,'Own'),
 	(24,24,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(25,25,1,'2012-01-16 00:00:00','Купил сам на Кипре, в Starbucks Paphos',9.35,'Own'),
-	(26,26,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
-	(27,27,1,'2012-01-26 00:00:00','Привезла Немодрук Юлия из Германии',NULL,'Own'),
+	(26,26,1,'2012-01-26 00:00:00','Купил сам в США, на Манхэттене',NULL,'Own'),
+	(27,27,1,'2012-01-26 00:00:00','Привезла Юлия Немодрук из Германии',NULL,'Own'),
 	(28,28,1,'2012-01-26 00:00:00','Прислал по почте Harrison Lee из США',NULL,'Own'),
-	(29,29,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
+	(29,29,1,'2012-01-26 00:00:00','Привезла Татьяна Петровна из Великобритании',NULL,'Own'),
 	(30,30,1,'2012-01-26 00:00:00','Прислал по почте Harrison Lee из США',NULL,'Own'),
-	(31,31,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
-	(32,32,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
+	(31,31,1,'2012-01-26 00:00:00','Привез Harrison Lee',NULL,'Own'),
+	(32,32,1,'2012-01-26 00:00:00','Привез Harrison Lee',NULL,'Own'),
 	(33,33,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(34,34,1,'2012-01-26 00:00:00','Привез папа из Греции',NULL,'Own'),
 	(35,35,1,'2012-01-26 00:00:00','Прислал по почте Harrison Lee',NULL,'Own'),
