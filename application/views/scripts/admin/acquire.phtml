@@ -10,13 +10,16 @@
 	<li id="task7">Анализ списка кружек</li>
 </ol>
 
-<h2>Countries to be Added to database</h2>
-<ol id="countries2Add">
-</ol>
-
-<h2>Series to be Added to database</h2>
-<ol id="series2Add">
-</ol>
+<table><tbody  style="vertical-align: top;"><tr>
+<td><h2>Countries to be Added to database</h2><ol id="countries2Add"></ol></td>
+<td><h2>Countries to be Deleted from database</h2><ol id="countries2Delete"></ol></td>
+</tr><tr>
+<td><h2>Series to be Added to database</h2><ol id="series2Add"></ol></td>
+<td><h2>Series to be Deleted from database</h2><ol id="series2Delete"></ol></td>
+</tr><tr>
+<td><h2>Mugs to be Added to database</h2><ol id="mugs2Add"></ol></td>
+<td><h2>Mugs to be Deleted from database</h2><ol id="mugs2Delete"></ol></td>
+</tr></tbody></table>
 
 <script type="text/javascript">
 /*
@@ -45,6 +48,7 @@ function ArrayIndexOf(a, fnc) {
 $(function() {
 	var baseCountries = [];
 	var baseSeries = [];
+	var baseMugs = [];
 	var wikiMugs = [];
 	
 	// Добавляем обработку для того, чтобы все анализы запускались только после успешного
@@ -74,6 +78,19 @@ $(function() {
 				baseSeries.push(value);
 			});
 			$('<span>выполнено</span>').appendTo('#task2');
+		}
+	}),
+	$.ajax({
+		url: '/admin/mugs',
+		dataType: 'json',
+		beforeSend: function() {
+			$('<span>...</span>').appendTo('#task3');
+		},
+		success: function(data) {
+			$.each(data, function(index, value) { 
+				baseMugs.push(value);
+			});
+			$('<span>выполнено</span>').appendTo('#task3');
 		}
 	}),
 	$.ajax({
@@ -116,13 +133,16 @@ $(function() {
 		}
 	})
 	).then(function() {
+		// анализ стран
     	$('<span>...</span>').appendTo('#task5');
     	var countries2Add = [];
     	
     	$.each(wikiMugs, function(index, wikiMug) {
     		var indexCountryId = ArrayIndexOf(baseCountries, function(obj) {
-				return obj.countryName.toUpperCase() == wikiMug.country.toUpperCase() ||
+    			var itemFound = obj.countryName.toUpperCase() == wikiMug.country.toUpperCase() ||
 					   (obj.countryAcquireAlias != null && obj.countryAcquireAlias.toUpperCase() == wikiMug.country.toUpperCase());
+				if (itemFound) obj.usedCount = (obj.usedCount || 0) + 1;
+				return itemFound;
 			});
     		if (indexCountryId > -1) {
     			this.countryId = baseCountries[indexCountryId].id;
@@ -136,15 +156,24 @@ $(function() {
 			var li = $('<li>');
 			li.text(value).appendTo('#countries2Add');
 		});
+		$.each(baseCountries, function(index, value) {
+			if ( 0 == (value.usedCount || 0) ) {
+				var li = $('<li>');
+				li.text(value.countryName).appendTo('#countries2Delete');
+			}
+		});
 		$('<span>выполнено</span>').appendTo('#task5');
 		
+		// анализ серий
 		$('<span>...</span>').appendTo('#task6');
     	var series2Add = [];
     	
     	$.each(wikiMugs, function(index, wikiMug) {
     		var indexSerieId = ArrayIndexOf(baseSeries, function(obj) {
-				return obj.serieName.toUpperCase() == wikiMug.serie.toUpperCase() ||
+				var itemFound = obj.serieName.toUpperCase() == wikiMug.serie.toUpperCase() ||
 					   (obj.serieAcquireAlias != null && obj.serieAcquireAlias.toUpperCase() == wikiMug.serie.toUpperCase());
+				if (itemFound) obj.usedCount = (obj.usedCount || 0) + 1;
+				return itemFound;
 			});
     		if (indexSerieId > -1) {
     			this.serieId = baseSeries[indexSerieId].id;
@@ -158,7 +187,52 @@ $(function() {
 			var li = $('<li>');
 			li.text(value).appendTo('#series2Add');
 		});
+		$.each(baseSeries, function(index, value) {
+			if ( 0 == (value.usedCount || 0) ) {
+				var li = $('<li>');
+				li.text(value.countryName).appendTo('#series2Delete');
+			}
+		});
 		$('<span>выполнено</span>').appendTo('#task6');
+
+		// анализ самих кружек
+		$('<span>...</span>').appendTo('#task7');
+    	var mugs2Add = [];
+    	
+    	$.each(wikiMugs, function(index, wikiMug) {
+    		var indexMugId = ArrayIndexOf(baseMugs, function(obj) {
+				var itemFound = obj.mugName.toUpperCase() == wikiMug.name.toUpperCase() &&
+					   			obj.mugSerieId == wikiMug.serieId &&
+					   			obj.mugCountryId == wikiMug.countryId;
+				if (itemFound) obj.usedCount = (obj.usedCount || 0) + 1;
+				return itemFound;
+			});
+    		if (indexMugId > -1) {
+    			// Если кружка нашлась - все хорошо, ничего не делаем
+    		} else {
+    			// Можно не делать проверку, так как в вики по идее кружки уникальны
+    			if (-1 == $.inArray(this, mugs2Add)) {
+    				mugs2Add.push(this);
+    			}
+    		}
+    	});
+    	$.each(mugs2Add, function(index, value) {
+    		if (value.countryId !== undefined && value.serieId !== undefined) {		// Если страна или серия не найдена, то добавлять все равно нельзя
+				var li = $('<li>');
+				li.text(value.country + ' (' + value.countryId + ') - '
+					  + value.serie + ' (' + value.serieId + ') - '
+					  + value.name).appendTo('#mugs2Add');
+			}
+		});
+		$.each(baseMugs, function(index, value) {
+			if ( 0 == (value.usedCount || 0)) {
+				var li = $('<li>');
+				li.text(value.mugCountryId + ' - '
+					  + value.mugSerieId + ' - '
+					  + value.mugName).appendTo('#mugs2Delete');
+				}
+		});
+		$('<span>выполнено</span>').appendTo('#task7');
 	});
 
 });

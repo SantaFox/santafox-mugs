@@ -129,4 +129,42 @@ class AdminController extends Zend_Controller_Action {
 
         $this->_helper->json($result->toArray());
 	}
+
+    /**
+     * (AJAX) Действие контроллера - получение списка кружек для сверки с вики
+     *
+	 * В запросе не требуется никакая информация. Вызывается модель, возвращающая <b>Zend_Db_Rowset</b>,
+	 * который потом конвертируется в ассоциативный массив формата "Имя столбца" => "Значение".
+     * Возвращаются только необходимые поля:
+     * <ul>
+     * <li>id</li>
+     * <li>mugName/li>
+     * <li>mugCountryId</li>
+     * <li>mugSerieId</li>
+     * </ul>
+	 * JSON возвращает такой массив в виде массива объектов с тремя указанными свойствами.
+	 *
+	 * @uses	Application_Model_DbTable_Mugs::getMugsForAcquire()
+	 * @todo	ИСПРАВИТЬ ОПИСАНИЕ!!!!
+     */
+	public function mugsAction() {
+        $log = Zend_Registry::get('log');
+        
+        $request = $this->getRequest();
+        
+		// Сначала предотвратим некорректный вызов процедуры
+        $isAjax = $request->isXmlHttpRequest();
+        if (!$isAjax) {
+            $log->alert('Попытка вызова admin/mugs напрямую, без AJAX');
+            die();
+        }
+        
+        // Получаем код клиента из запроса и вызываем модель
+        $countriesTable = new Application_Model_DbTable_Mugs();
+        $result = $countriesTable->getMugsForAcquire();
+        
+        $log->info("Был вызван admin/mugs напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
+
+        $this->_helper->json($result->toArray());
+	}
 }
