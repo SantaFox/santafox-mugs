@@ -14,6 +14,10 @@
 <ol id="countries2Add">
 </ol>
 
+<h2>Series to be Added to database</h2>
+<ol id="series2Add">
+</ol>
+
 <script type="text/javascript">
 /*
  * ArrayIndexOf(a, fnc) takes two parameters:
@@ -40,6 +44,7 @@ function ArrayIndexOf(a, fnc) {
 <script type="text/javascript">
 $(function() {
 	var baseCountries = [];
+	var baseSeries = [];
 	var wikiMugs = [];
 	
 	// Добавляем обработку для того, чтобы все анализы запускались только после успешного
@@ -56,6 +61,19 @@ $(function() {
 				baseCountries.push(value);
 			});
 			$('<span>выполнено</span>').appendTo('#task1');
+		}
+	}),
+	$.ajax({
+		url: '/admin/series',
+		dataType: 'json',
+		beforeSend: function() {
+			$('<span>...</span>').appendTo('#task2');
+		},
+		success: function(data) {
+			$.each(data, function(index, value) { 
+				baseSeries.push(value);
+			});
+			$('<span>выполнено</span>').appendTo('#task2');
 		}
 	}),
 	$.ajax({
@@ -102,12 +120,12 @@ $(function() {
     	var countries2Add = [];
     	
     	$.each(wikiMugs, function(index, wikiMug) {
-    		var countryId = ArrayIndexOf(baseCountries, function(obj) {
+    		var indexCountryId = ArrayIndexOf(baseCountries, function(obj) {
 				return obj.countryName.toUpperCase() == wikiMug.country.toUpperCase() ||
-					   obj.countryAcquireAlias.toUpperCase() == wikiMug.country.toUpperCase();
+					   (obj.countryAcquireAlias != null && obj.countryAcquireAlias.toUpperCase() == wikiMug.country.toUpperCase());
 			});
-    		if (countryId > -1) {
-    			this.countryId = countryId;
+    		if (indexCountryId > -1) {
+    			this.countryId = baseCountries[indexCountryId].id;
     		} else {
     			if (-1 == $.inArray(this.country, countries2Add)) {
     				countries2Add.push(this.country);
@@ -119,6 +137,28 @@ $(function() {
 			li.text(value).appendTo('#countries2Add');
 		});
 		$('<span>выполнено</span>').appendTo('#task5');
+		
+		$('<span>...</span>').appendTo('#task6');
+    	var series2Add = [];
+    	
+    	$.each(wikiMugs, function(index, wikiMug) {
+    		var indexSerieId = ArrayIndexOf(baseSeries, function(obj) {
+				return obj.serieName.toUpperCase() == wikiMug.serie.toUpperCase() ||
+					   (obj.serieAcquireAlias != null && obj.serieAcquireAlias.toUpperCase() == wikiMug.serie.toUpperCase());
+			});
+    		if (indexSerieId > -1) {
+    			this.serieId = baseSeries[indexSerieId].id;
+    		} else {
+    			if (-1 == $.inArray(this.serie, series2Add)) {
+    				series2Add.push(this.serie);
+    			}
+    		}
+    	});
+    	$.each(series2Add, function(index, value) {
+			var li = $('<li>');
+			li.text(value).appendTo('#series2Add');
+		});
+		$('<span>выполнено</span>').appendTo('#task6');
 	});
 
 });
