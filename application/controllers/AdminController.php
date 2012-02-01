@@ -167,4 +167,57 @@ class AdminController extends Zend_Controller_Action {
 
         $this->_helper->json($result->toArray());
 	}
+	
+	    /**
+     * (AJAX) Действие контроллера - добавление новой кружки
+     *
+	 * В запросе приходит массив с полями для новой кружки.
+
+	 *
+	 * @uses	Application_Model_DbTable_Mugs::addMug()
+	 * @uses	Application_Model_DbTable_Log::writeLog()
+     */
+	public function addMugAction() {
+		$log = Zend_Registry::get('log');
+		
+		$request = $this->getRequest();
+
+		// Сначала предотвратим некорректный вызов процедуры
+		$isAjax = $request->isXmlHttpRequest();
+		if (!$isAjax) {
+			$log->alert('Попытка вызова admin/addMug напрямую, без AJAX');
+			die();
+		}
+
+		// Модели на будущее
+		$mugsModel = new Application_Model_DbTable_Mugs();
+		$logModel = new Application_Model_DbTable_Log();
+		
+		// В запросе у нас есть 3 пары "Название поля в таблице - значение".
+		try {
+			$params = $request->getPost();
+			$mugsAdded = 0;
+			//Zend_Debug::dump($params["mugs"]);
+			foreach ($params["mugs"] as $mug) {
+				$mugId = $mugsModel->addMug( $mug );
+				$mugsAdded += 1;
+					
+				// Формируем строку с полями
+				$logString = '';
+				foreach ($mug as $key => $value) {
+					$logString = (strlen($logString) == 0) ? '' : $logString . ', ';
+					$logString = $logString . "{$key}: \"{$value}\"";
+				}				
+				// И записываем строку в лог
+				$logModel->writeLog('Adding', $logString);
+			}
+
+			$result = array( 'status' => 'success', 'message' => "{$mugsAdded} mug(s) added" );
+		} catch (Zend_Exception $e) {
+			$this->_helper->json( array( 'status' => 'fail', 'message' => $e->getMessage() ) );
+		}
+		
+		$this->_helper->json($result);
+	}
+
 }

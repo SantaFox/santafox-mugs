@@ -1,4 +1,9 @@
 <?php ?>
+<script type="text/javascript" charset="utf-8"> 
+	$(document).ready(function() {
+		$('#importMug').button();
+	} );
+</script>
 
 <ol id="tasks">
 	<li id="task1">Загрузка списка стран</li>
@@ -17,11 +22,11 @@
 <td><h2>Series to be Added to database</h2><ol id="series2Add"></ol></td>
 <td><h2>Series to be Deleted from database</h2><ol id="series2Delete"></ol></td>
 </tr><tr>
-<td><h2>Mugs to be Added to database</h2><ol id="mugs2Add"></ol></td>
+<td><h2>Mugs to be Added to database</h2><ol id="mugs2Add"></ol><button id="importMug" onClick="fnButtonImportMugs();">Import mugs</button></td>
 <td><h2>Mugs to be Deleted from database</h2><ol id="mugs2Delete"></ol></td>
 </tr></tbody></table>
 
-<script type="text/javascript">
+<script type="text/javascript" charset="utf-8">
 /*
  * ArrayIndexOf(a, fnc) takes two parameters:
  *	- the array
@@ -190,7 +195,7 @@ $(function() {
 		$.each(baseSeries, function(index, value) {
 			if ( 0 == (value.usedCount || 0) ) {
 				var li = $('<li>');
-				li.text(value.countryName).appendTo('#series2Delete');
+				li.text(value.serieName).appendTo('#series2Delete');
 			}
 		});
 		$('<span>выполнено</span>').appendTo('#task6');
@@ -221,7 +226,11 @@ $(function() {
 				var li = $('<li>');
 				li.text(value.country + ' (' + value.countryId + ') - '
 					  + value.serie + ' (' + value.serieId + ') - '
-					  + value.name).appendTo('#mugs2Add');
+					  + value.name);
+				li.data('countryId', value.countryId)
+				  .data('serieId', value.serieId)
+				  .data('mugName', value.name)
+				  .appendTo('#mugs2Add');
 			}
 		});
 		$.each(baseMugs, function(index, value) {
@@ -236,4 +245,35 @@ $(function() {
 	});
 
 });
+</script>
+
+<script type="text/javascript" charset="utf-8">
+function fnButtonImportMugs() {
+	var ajaxMugs = [];
+	$('#mugs2Add li').each( function() {
+		ajaxMugs.push( { mugCountryId : $(this).data('countryId'),
+						 mugSerieId : $(this).data('serieId'),
+						 mugName : $(this).data('mugName') } );
+	});
+
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: "/admin/add-mug",
+		data: { mugs: ajaxMugs },		// using simply "ajaxMugs" causes a post filled with "undefined"
+		success: function (data, textStatus, jqXHR) {
+			// Model/Controller servererror is still a success
+			if (data.status == "fail") {
+				$('<span style="color: red;"> - ' + data.message + '</span>').appendTo('#mugs2Add');
+			};
+			if (data.status == "success") {
+				$('<span>' + data.message + '</span>').appendTo('#mugs2Add');
+			};
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			// Possible values for the second argument (besides null) are "timeout", "error", "abort", and "parsererror". 
+			$('<span style="color: red;"> - ' + textStatus + '</span>').appendTo('#mugs2Add');
+		}
+	} );
+}
 </script>

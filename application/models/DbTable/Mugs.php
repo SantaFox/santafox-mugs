@@ -45,7 +45,7 @@ class Application_Model_DbTable_Mugs extends Zend_Db_Table_Abstract {
 	 * @param	null|string	$countryId	id страны для фильтрации
 	 * @return	Zend_Db_Rowset			Результат запроса
      */
-	public function getSeriesCloud($userId = '', $countryId = '') {
+	public function getMugsList($userId = '', $countryId = '') {
 		$select = $this->select()
 		               ->setIntegrityCheck(false)      // Странная идея, надо доразобраться
 					   ->from('series',
@@ -89,4 +89,29 @@ class Application_Model_DbTable_Mugs extends Zend_Db_Table_Abstract {
     	return $this->fetchAll($select);
 	}
 
+    /**
+     * Создание новой кружки
+     *
+     * Должны быть заполнены необходимые поля записи:
+     * <ul>
+	 * <li>mugName</li>
+	 * <li>mugCountryId</li>
+	 * <li>mugSerieId</li>
+	 * </ul>
+     *
+     * @throws	Zend_Exception			В случае ошибки базы данных
+     * @param	array	$params			Данные для новой записи в формате "Имя поля" => "Новое значение"
+     * @return	int						Идентификатор новой записи
+     */
+	public function addMug ($params) {
+		// Теперь делаем непосредственно операцию в базе
+		try {
+			$mugId = $this->insert( $params );
+		} catch (Zend_Exception $e) {
+			// Если возникла ошибка, то надо перегенерить ее и отдать дальше
+			throw new Zend_Exception ('Ошибка базы данных', -1, $e);
+		}
+		
+		return $mugId;
+	}
 }
