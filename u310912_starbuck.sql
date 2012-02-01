@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.9)
 # Database: u310912_starbuck
-# Generation Time: 2012-01-30 20:41:08 +0000
+# Generation Time: 2012-02-01 20:00:34 +0000
 # ************************************************************
 
 
@@ -99,6 +99,21 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table log
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `log`;
+
+CREATE TABLE `log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `logUserId` int(11) NOT NULL,
+  `logAction` varchar(50) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `logDescription` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
 # Dump of table mugs
 # ------------------------------------------------------------
 
@@ -185,7 +200,7 @@ LOCK TABLES `mugs2users` WRITE;
 INSERT INTO `mugs2users` (`id`, `mug_id`, `user_id`, `added_moment`, `added_comment`, `price_paid`, `status`)
 VALUES
 	(1,1,1,'2012-01-26 00:00:00','Привез папа из Греции',NULL,'Own'),
-	(2,2,1,'2012-01-26 00:00:00','Привезла Елена Бабакова из Испании',NULL,'Own'),
+	(2,2,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(3,3,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(4,4,1,'2012-01-26 00:00:00',NULL,NULL,'Own'),
 	(5,5,1,'2012-01-26 00:00:00','Привезла Елена Бабакова из США',NULL,'Own'),
