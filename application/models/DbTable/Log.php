@@ -1,8 +1,8 @@
 <?php
 /**
- * PEKO-M Dashboard
+ * Starbucks Mugs
  *
- * @package		dashboard
+ * @package		site
  * @subpackage	dbtables
  * @copyright	Copyright (c) 2011+ PEKO-M
  * @since		1.0 Beta
@@ -10,12 +10,12 @@
  */
 
 /**
- * Модель для таблицы dashboard.log
+ * Модель для таблицы log
  *
  * Предназначена для записи в базу действий пользователей, связанных с изменение данных базы.
  * Указанная таблица не является логом ошибок, предупреждений или прочей служебной информации.
  *
- * @package		dashboard
+ * @package		site
  * @subpackage	dbtables
  */
 class Application_Model_DbTable_Log extends Zend_Db_Table_Abstract {
@@ -41,7 +41,7 @@ class Application_Model_DbTable_Log extends Zend_Db_Table_Abstract {
 	public function writeLog($sAction, $sDescription) {
 		// Сначала надо получить пользователя
 		$auth = Zend_Auth::getInstance();
-		$userId = $auth->getIdentity()->id;
+		$userId = null; //$auth->getIdentity()->id;
 		
 		$params = array(
 			'logUserId' => $userId,
