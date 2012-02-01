@@ -17,22 +17,22 @@ $(function() {
 	// Запрашиваем список стран с количествами кружек
     $.getJSON("api/countries", function(data) {
 		var countMin = 0, countMax = 0;
-		var sizeMin = 1.0, sizeMax = 2.0;		// Размеры в .em в пропорции от кол-ва кружек
+		var sizeMin = 1.0, sizeMax = 2.5;		// Размеры в .em в пропорции от кол-ва кружек
 
 		// Создаем ненумерованый список
 		$("<ul>").attr("id", "tagList").appendTo("#countriesCloud");  
       
 		// Теперь в цикле создаем теги 
 		$.each(data, function(index, value) { 
-		
-			var li = $("<li>");  
+			var li = $("<li>");
+			var intMugsCount = parseInt(value.mugsCount);
 
 			// TODO: линк потом заменится на обработку нажатия
 			//$("<a>").text(value.countryName).attr({title:"See all mugs from " + value.countryName, href:"mugs/list/" + value.countryName}).appendTo(li);
 			//$("<a>").text(value.countryName).data("mugsCount", value.mugsCount).appendTo(li);
 			li.text(value.countryName).data("mugsCount", value.mugsCount);
-			if ( value.mugsCount > countMax ) { countMax = value.mugsCount };
-			if ( value.mugsCount < countMin || countMin == 0 ) { countMin = value.mugsCount };
+			if ( intMugsCount > countMax ) { countMax = intMugsCount };
+			if ( intMugsCount < countMin || countMin == 0 ) { countMin = intMugsCount };
 
       		li.appendTo("#countriesCloud ul");  
 		});
