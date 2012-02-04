@@ -54,4 +54,32 @@ class Application_Model_DbTable_Aliases extends Zend_Db_Table_Abstract {
     	
     	return $this->fetchAll($select);
 	}
+
+    /**
+     * Получение списка синонимов для серий
+     *
+     * Используется для получения списка синонимов для серий. Возвращаются
+     * все синонимы, так как фильтрацией должна заниматься модель более
+     * высокого уровня
+     *
+     * Возвращаются только необходимые поля:
+     * <ul>
+     * <li>id</li>
+     * <li>aliasSerieId</li>
+     * <li>aliasName</li>
+     * </ul>
+	 *
+	 * @return	Zend_Db_Rowset			Результат запроса
+     */
+	public function getAliasesForSeries() {
+		$select = $this->select()
+					   ->from('aliases',
+							  array('id',
+									'aliasSerieId',
+									'aliasName'))
+					   ->where('aliasSerieId IS NOT NULL')
+    				   ->order('aliasSerieId');
+    	
+    	return $this->fetchAll($select);
+	}
 }

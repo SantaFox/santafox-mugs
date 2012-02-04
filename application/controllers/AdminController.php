@@ -129,12 +129,19 @@ class AdminController extends Zend_Controller_Action {
         }
         
         // Получаем код клиента из запроса и вызываем модель
-        $countriesTable = new Application_Model_DbTable_Series();
-        $result = $countriesTable->getSeriesForAcquire();
+        $seriesTable = new Application_Model_DbTable_Series();
+        $aliasesTable = new Application_Model_DbTable_Aliases();
+        
+        $series = $seriesTable->getSeriesForAcquire();
+        $aliases = $aliasesTable->getAliasesForSeries();
+        
+        $result = array(
+        	'series' => $series->toArray(),
+        	'aliases' => $aliases->toArray() );
         
         $log->info("Был вызван admin/series напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
 
-        $this->_helper->json($result->toArray());
+        $this->_helper->json($result);
 	}
 
     /**

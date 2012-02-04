@@ -52,7 +52,7 @@ function ArrayIndexOf(a, fnc) {
 <script type="text/javascript">
 $(function() {
 	var baseCountries;
-	var baseSeries = [];
+	var baseSeries;
 	var baseMugs = [];
 	var wikiMugs = [];
 	
@@ -77,9 +77,7 @@ $(function() {
 			$('<span>...</span>').appendTo('#task2');
 		},
 		success: function(data) {
-			$.each(data, function(index, value) { 
-				baseSeries.push(value);
-			});
+			baseSeries = data;
 			$('<span>выполнено</span>').appendTo('#task2');
 		}
 	}),
@@ -179,14 +177,21 @@ $(function() {
     	var series2Add = [];
     	
     	$.each(wikiMugs, function(index, wikiMug) {
-    		var indexSerieId = ArrayIndexOf(baseSeries, function(obj) {
-				var itemFound = obj.serieName.toUpperCase() == wikiMug.serie.toUpperCase() ||
-					   (obj.serieAcquireAlias != null && obj.serieAcquireAlias.toUpperCase() == wikiMug.serie.toUpperCase());
-				if (itemFound) obj.usedCount = (obj.usedCount || 0) + 1;
+    		var indexSerieId = ArrayIndexOf(baseSeries.series, function(curSerie) {
+    			// сначала проверяем в основной таблице
+    			var itemFound = curSerie.serieName.toUpperCase() == wikiMug.serie.toUpperCase();
+				// если не нашли - то проверяем в таблице синонимов
+				if (!itemFound) {
+					itemFound = ArrayIndexOf(baseSeries.aliases, function(curAlias) {
+						return curAlias.aliasSerieId == curSerie.id &&
+							   curAlias.aliasName.toUpperCase() == wikiMug.serie.toUpperCase();
+					}) > -1;
+				}
+				if (itemFound) curSerie.usedCount = (curSerie.usedCount || 0) + 1;
 				return itemFound;
 			});
     		if (indexSerieId > -1) {
-    			this.serieId = baseSeries[indexSerieId].id;
+    			this.serieId = baseSeries.series[indexSerieId].id;
     		} else {
     			if (-1 == $.inArray(this.serie, series2Add)) {
     				series2Add.push(this.serie);
@@ -197,7 +202,7 @@ $(function() {
 			var li = $('<li>');
 			li.text(value).appendTo('#series2Add');
 		});
-		$.each(baseSeries, function(index, value) {
+		$.each(baseSeries.series, function(index, value) {
 			if ( 0 == (value.usedCount || 0) ) {
 				var li = $('<li>');
 				li.text(value.serieName).appendTo('#series2Delete');

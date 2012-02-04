@@ -72,7 +72,6 @@ class Application_Model_DbTable_Series extends Zend_Db_Table_Abstract {
      * <ul>
      * <li>id</li>
      * <li>serieName</li>
-     * <li>serieAcquireAlias</li>
      * </ul>
 	 *
      * @return	Zend_Db_Rowset			Результат запроса
@@ -81,8 +80,7 @@ class Application_Model_DbTable_Series extends Zend_Db_Table_Abstract {
 		$select = $this->select()
 					   ->from('series',
 							  array('id',
-									'serieName',
-									'serieAcquireAlias'));
+									'serieName'));
 
     	return $this->fetchAll($select);
 	}
