@@ -72,7 +72,6 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
      * <ul>
      * <li>id</li>
      * <li>countryName</li>
-     * <li>countryAcquireAlias</li>
      * </ul>
 	 *
      * @return	Zend_Db_Rowset			Результат запроса
@@ -81,8 +80,7 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
 		$select = $this->select()
 					   ->from('countries',
 							  array('id',
-									'countryName',
-									'countryAcquireAlias'));
+									'countryName'));
 
     	return $this->fetchAll($select);
 	}

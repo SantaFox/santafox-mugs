@@ -51,7 +51,7 @@ function ArrayIndexOf(a, fnc) {
 
 <script type="text/javascript">
 $(function() {
-	var baseCountries = [];
+	var baseCountries;
 	var baseSeries = [];
 	var baseMugs = [];
 	var wikiMugs = [];
@@ -66,9 +66,7 @@ $(function() {
 			$('<span>...</span>').appendTo('#task1');
 		},
 		success: function(data) {
-			$.each(data, function(index, value) { 
-				baseCountries.push(value);
-			});
+			baseCountries = data;
 			$('<span>выполнено</span>').appendTo('#task1');
 		}
 	}),
@@ -143,14 +141,21 @@ $(function() {
     	var countries2Add = [];
     	
     	$.each(wikiMugs, function(index, wikiMug) {
-    		var indexCountryId = ArrayIndexOf(baseCountries, function(obj) {
-    			var itemFound = obj.countryName.toUpperCase() == wikiMug.country.toUpperCase() ||
-					   (obj.countryAcquireAlias != null && obj.countryAcquireAlias.toUpperCase() == wikiMug.country.toUpperCase());
-				if (itemFound) obj.usedCount = (obj.usedCount || 0) + 1;
+    		var indexCountryId = ArrayIndexOf(baseCountries.countries, function(curCountry) {
+    			// сначала проверяем в основной таблице
+    			var itemFound = curCountry.countryName.toUpperCase() == wikiMug.country.toUpperCase();
+				// если не нашли - то проверяем в таблице синонимов
+				if (!itemFound) {
+					itemFound = ArrayIndexOf(baseCountries.aliases, function(curAlias) {
+						return curAlias.aliasCountryId == curCountry.id &&
+							   curAlias.aliasName.toUpperCase() == wikiMug.country.toUpperCase();
+					}) > -1;
+				}
+				if (itemFound) curCountry.usedCount = (curCountry.usedCount || 0) + 1;
 				return itemFound;
 			});
     		if (indexCountryId > -1) {
-    			this.countryId = baseCountries[indexCountryId].id;
+    			this.countryId = baseCountries.countries[indexCountryId].id;
     		} else {
     			if (-1 == $.inArray(this.country, countries2Add)) {
     				countries2Add.push(this.country);
@@ -161,7 +166,7 @@ $(function() {
 			var li = $('<li>');
 			li.text(value).appendTo('#countries2Add');
 		});
-		$.each(baseCountries, function(index, value) {
+		$.each(baseCountries.countries, function(index, value) {
 			if ( 0 == (value.usedCount || 0) ) {
 				var li = $('<li>');
 				li.text(value.countryName).appendTo('#countries2Delete');
@@ -222,16 +227,15 @@ $(function() {
     		}
     	});
     	$.each(mugs2Add, function(index, value) {
-    		if (value.countryId !== undefined && value.serieId !== undefined) {		// Если страна или серия не найдена, то добавлять все равно нельзя
-				var li = $('<li>');
-				li.text(value.country + ' (' + value.countryId + ') - '
-					  + value.serie + ' (' + value.serieId + ') - '
-					  + value.name);
-				li.data('countryId', value.countryId)
-				  .data('serieId', value.serieId)
-				  .data('mugName', value.name)
-				  .appendTo('#mugs2Add');
-			}
+			var li = $('<li>');
+			li.text(value.country + ' (' + value.countryId + ') - '
+				  + value.serie + ' (' + value.serieId + ') - '
+				  + value.name);
+			if (value.countryId !== undefined) li.data('countryId', value.countryId);
+			if (value.serieId !== undefined) li.data('serieId', value.serieId);
+			if (value.countryId === undefined || value.serieId === undefined) li.css('color', 'red');
+			li.data('mugName', value.name)
+			  .appendTo('#mugs2Add');
 		});
 		$.each(baseMugs, function(index, value) {
 			if ( 0 == (value.usedCount || 0)) {
@@ -251,9 +255,12 @@ $(function() {
 function fnButtonImportMugs() {
 	var ajaxMugs = [];
 	$('#mugs2Add li').each( function() {
-		ajaxMugs.push( { mugCountryId : $(this).data('countryId'),
-						 mugSerieId : $(this).data('serieId'),
-						 mugName : $(this).data('mugName') } );
+	    if ($(this).data('countryId') !== undefined &&
+	        $(this).data('serieId') !== undefined) {		// Если страна или серия не найдена, то добавлять все равно нельзя
+			ajaxMugs.push( { mugCountryId : $(this).data('countryId'),
+							 mugSerieId : $(this).data('serieId'),
+							 mugName : $(this).data('mugName') } );
+		}
 	});
 
 	$.ajax({

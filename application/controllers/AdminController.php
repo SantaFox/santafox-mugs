@@ -86,11 +86,18 @@ class AdminController extends Zend_Controller_Action {
         
         // Получаем код клиента из запроса и вызываем модель
         $countriesTable = new Application_Model_DbTable_Countries();
-        $result = $countriesTable->getCountriesForAcquire();
+        $aliasesTable = new Application_Model_DbTable_Aliases();
+        
+        $countries = $countriesTable->getCountriesForAcquire();
+        $aliases = $aliasesTable->getAliasesForCountries();
+        
+        $result = array(
+        	'countries' => $countries->toArray(),
+        	'aliases' => $aliases->toArray() );
         
         $log->info("Был вызван admin/countries напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
 
-        $this->_helper->json($result->toArray());
+        $this->_helper->json($result);
 	}
 	
     /**
