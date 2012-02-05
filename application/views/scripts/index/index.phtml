@@ -1,50 +1,112 @@
 <?php ?>
 
 <style type="text/css">
-	#countriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; font-family:arial; }  
+	#countriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left;}  
     #countriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
-    #countriesCloud ul { margin:0; padding:0; }  
-    #countriesCloud ul li { list-style-type:none; float:left; margin:0 10px; height:35px;}  
+    #countriesCloud ul { list-style-type:none; margin:0; padding:0; }  
+    #countriesCloud ul li { float:left; margin:0 10px; height:35px;}  
+
+	#seriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left;}  
+    #seriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
+    #seriesCloud ul { list-style-type:none; margin:0; padding:0; }  
+    #seriesCloud ul li { float:left; margin:0 10px; height:35px;}  
+
+	#mugsCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left; }  
+    #mugsCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
+    #mugsCloud ul li { text-align: left; }
+    
+    li { cursor: pointer; }
+    .selected { color: red; }
 </style>
 
 <div id="countriesCloud">
 	<h2>Countries</h2>
+	<ul id="countriesList"></ul>
+</div>
+
+<div id="seriesCloud">
+	<h2>Series</h2>
+	<ul id="seriesList"></ul>
+</div>
+
+<div id="mugsCloud">
+	<h2>Mugs</h2>
+	<ul id="mugsList"></ul>
 </div>
 
 <script type="text/javascript">  
+$(function() {
+	// Настраиваем все элементы так, чтобы при выборе одного все остальные освобождались
+	$('body').on('click', '#countriesList li', function() {
+		$('#countriesCloud').data('selected', $(this).data('id'));
+		ReloadSeries();
+		ReloadMugs();
+	});
 
-$(function() {  
+	ReloadCountries();
+	ReloadSeries();
+	//ReloadMugs();
+});
+
+function ReloadCountries() {	
 	// Запрашиваем список стран с количествами кружек
     $.getJSON("api/countries", function(data) {
-		var countMin = 0, countMax = 0;
-		var sizeMin = 1.0, sizeMax = 2.5;		// Размеры в .em в пропорции от кол-ва кружек
-
-		// Создаем ненумерованый список
-		$("<ul>").attr("id", "tagList").appendTo("#countriesCloud");  
-      
-		// Теперь в цикле создаем теги 
-		$.each(data, function(index, value) { 
-			var li = $("<li>");
-			var intMugsCount = parseInt(value.mugsCount);
-
-			// TODO: линк потом заменится на обработку нажатия
-			//$("<a>").text(value.countryName).attr({title:"See all mugs from " + value.countryName, href:"mugs/list/" + value.countryName}).appendTo(li);
-			//$("<a>").text(value.countryName).data("mugsCount", value.mugsCount).appendTo(li);
-			li.text(value.countryName).data("mugsCount", value.mugsCount);
-			if ( intMugsCount > countMax ) { countMax = intMugsCount };
-			if ( intMugsCount < countMin || countMin == 0 ) { countMin = intMugsCount };
-
-      		li.appendTo("#countriesCloud ul");  
+    	$('#countriesList').empty();
+		$.each(data, function() { 
+			$("<li>").text(this.countryName)
+					 .data('id', this.id)
+					 .data('mugsCount', this.mugsCount)
+					 .appendTo('#countriesList');  
 		});
-		
-		if ( countMax > countMin ) {
-			$('#countriesCloud ul li').each(function(index) {
-				var countProportion = ($(this).data("mugsCount") - countMin) / (countMax - countMin);
-				var sizeNew = sizeMin + (sizeMax - sizeMin) * countProportion
-				$(this).animate( {fontSize: sizeNew + 'em'} );
-			});
-		}
-		
-	});  
-});  
+		ResizeTags( $('#countriesList li') );
+	});
+}
+
+function ReloadSeries() {	
+	// Запрашиваем список стран с количествами кружек
+    $.getJSON("api/series", function(data) {
+    	$('#seriesList').empty();
+		$.each(data, function() { 
+			$("<li>").text(this.serieName)
+					 .data('id', this.id)
+					 .data('mugsCount', this.mugsCount)
+					 .appendTo('#seriesList');  
+		});
+		ResizeTags( $('#seriesList li') );
+	});
+}	
+
+function ReloadMugs() {
+	var selectedCountry = $('#countriesCloud').data('selected') || '';
+
+	// Запрашиваем список кружек
+    $.getJSON('api/mugs', { countryId: selectedCountry }, function(data) {
+    	$('#mugsList').empty();
+		$.each(data, function() { 
+			$("<li>").text(this.countryName + ' - ' + this.serieName + ' - ' + this.mugName)
+					 .data('id', this.id)
+					 .appendTo('#mugsList');  
+		});
+	});
+}
+
+function ResizeTags (li) {
+	var countMin = 0, countMax = 0;
+	var sizeMin = 1.0, sizeMax = 2.5;		// Размеры в .em в пропорции от кол-ва кружек
+	
+	$(li).each(function() {
+		var intMugsCount = parseInt( $(this).data('mugsCount') );
+		if ( intMugsCount > countMax ) { countMax = intMugsCount };
+		if ( intMugsCount < countMin || countMin == 0 ) { countMin = intMugsCount };
+	});
+	
+	if ( countMax > countMin ) {
+		$(li).each(function() {
+			var intMugsCount = parseInt( $(this).data('mugsCount') );
+			var countProportion = (intMugsCount - countMin) / (countMax - countMin);
+			var sizeNew = sizeMin + (sizeMax - sizeMin) * countProportion;
+			$(this).animate( {fontSize: sizeNew + 'em'} );
+		});
+	};
+}
 </script> 

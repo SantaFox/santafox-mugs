@@ -55,11 +55,10 @@ class Application_Model_DbTable_Series extends Zend_Db_Table_Abstract {
 					   		  'series.id = mugs.mugSerieId',
 					   		  array('mugsCount' => 'COUNT(*)'))
 					   ->group('series.id')
-    				   ->order('serieName')
-    				   ->having('mugsCount > 0');
+    				   ->order('serieName');
         
-        if ($serieId != '') {
-            $select->where('mugCountryId = ?', (int)$serieId);
+        if ($countryId != '') {
+            $select->where('mugCountryId = ?', (int)$countryId);
         }
     	
     	return $this->fetchAll($select);

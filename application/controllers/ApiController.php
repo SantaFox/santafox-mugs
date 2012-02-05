@@ -53,4 +53,83 @@ class ApiController extends Zend_Controller_Action {
 
         $this->_helper->json($result->toArray());
 	}
+	
+    /**
+     * (AJAX) Действие контроллера - получение списка активных серий
+     *
+	 * В запросе не требуется никакая информация. Вызывается модель, возвращающая <b>Zend_Db_Rowset</b>,
+	 * который потом конвертируется в ассоциативный массив формата "Имя столбца" => "Значение".
+     * Возвращаются только необходимые поля:
+     * <ul>
+     * <li>id</li>
+     * <li>serieName</li>
+     * <li>mugsCount</li>
+     * </ul>
+	 * JSON возвращает такой массив в виде массива объектов с тремя указанными свойствами.
+	 *
+	 * @uses	Application_Model_DbTable_ItemClients::getActiveClients()
+	 * @todo	ИСПРАВИТЬ ОПИСАНИЕ!!!!
+     */
+	public function seriesAction() {
+        $log = Zend_Registry::get('log');
+        
+        $request = $this->getRequest();
+        
+		// Сначала предотвратим некорректный вызов процедуры
+        $isAjax = $request->isXmlHttpRequest();
+        if (!$isAjax) {
+            $log->alert('Попытка вызова api/series напрямую, без AJAX');
+            die();
+        }
+        
+        // Получаем код клиента из запроса и вызываем модель
+        $seriesTable = new Application_Model_DbTable_Series();
+        $result = $seriesTable->getSeriesCloud();
+        
+        $log->info("Был вызван api/series напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
+
+        $this->_helper->json($result->toArray());
+	}
+	
+    /**
+     * (AJAX) Действие контроллера - получение списка кружек
+     *
+	 * В запросе не требуется никакая информация. Вызывается модель, возвращающая <b>Zend_Db_Rowset</b>,
+	 * который потом конвертируется в ассоциативный массив формата "Имя столбца" => "Значение".
+     * Возвращаются только необходимые поля:
+     * <ul>
+     * <li>id</li>
+     * <li>serieName</li>
+     * <li>mugsCount</li>
+     * </ul>
+	 * JSON возвращает такой массив в виде массива объектов с тремя указанными свойствами.
+	 *
+	 * @uses	Application_Model_DbTable_ItemClients::getActiveClients()
+	 * @todo	ИСПРАВИТЬ ОПИСАНИЕ!!!!
+     */
+	public function mugsAction() {
+        $log = Zend_Registry::get('log');
+        
+        $request = $this->getRequest();
+        
+		// Сначала предотвратим некорректный вызов процедуры
+        $isAjax = $request->isXmlHttpRequest();
+        if (!$isAjax) {
+            $log->alert('Попытка вызова api/mugs напрямую, без AJAX');
+            die();
+        }
+
+        // Разбор переданных параметров
+		$countryId = $request->getParam('countryId');
+		$serieId = $request->getParam('serieId');
+		$userId = $request->getParam('userId');
+
+        // Получаем код клиента из запроса и вызываем модель
+        $mugsTable = new Application_Model_DbTable_Mugs();
+        $result = $mugsTable->getMugsList($countryId, $serieId, $userId);
+        
+        $log->info("Был вызван api/mugs напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
+
+        $this->_helper->json($result->toArray());
+	}
 }

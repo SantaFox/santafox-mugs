@@ -37,31 +37,37 @@ class Application_Model_DbTable_Mugs extends Zend_Db_Table_Abstract {
      * Возвращаются только необходимые поля:
      * <ul>
      * <li>id</li>
+     * <li>countryName</li>
      * <li>serieName</li>
-     * <li>mugsCount</li>
+     * <li>mugName</li>
      * </ul>
 	 *
 	 * @param	null|string	$userId		id пользователя для фильтрации
 	 * @param	null|string	$countryId	id страны для фильтрации
 	 * @return	Zend_Db_Rowset			Результат запроса
      */
-	public function getMugsList($userId = '', $countryId = '') {
+	public function getMugsList($countryId = '', $serieId = '', $userId = '') {
 		$select = $this->select()
 		               ->setIntegrityCheck(false)      // Странная идея, надо доразобраться
-					   ->from('series',
+					   ->from('mugs',
 							  array('id',
-									'serieName'))
-					   ->join('mugs',
+									'mugName'))
+					   ->join('countries',
+					   		  'countries.id = mugs.mugCountryId',
+					   		  array('countryName'))
+					   ->join('series',
 					   		  'series.id = mugs.mugSerieId',
-					   		  array('mugsCount' => 'COUNT(*)'))
-					   ->group('series.id')
-    				   ->order('serieName')
-    				   ->having('mugsCount > 0');
+					   		  array('serieName'))
+    				   ->order(array('countryName', 'serieName', 'mugName'));
         
-        if ($serieId != '') {
-            $select->where('mugCountryId = ?', (int)$serieId);
+        if ($countryId != '') {
+            $select->where('mugCountryId = ?', (int)$countryId);
         }
-    	
+
+        if ($serieId != '') {
+            $select->where('mugSerieId = ?', (int)$serieId);
+        }
+
     	return $this->fetchAll($select);
 	}
 

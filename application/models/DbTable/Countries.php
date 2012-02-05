@@ -55,8 +55,7 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
 					   		  'countries.id = mugs.mugCountryId',
 					   		  array('mugsCount' => 'COUNT(*)'))
 					   ->group('countries.id')
-    				   ->order('countryName')
-    				   ->having('mugsCount > 0');
+    				   ->order('countryName');
         
         if ($serieId != '') {
             $select->where('mugSerieId = ?', (int)$serieId);
