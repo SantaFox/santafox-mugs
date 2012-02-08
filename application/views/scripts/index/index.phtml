@@ -1,24 +1,5 @@
 <?php ?>
 
-<style type="text/css">
-	#countriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left;}  
-    #countriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
-    #countriesCloud ul { list-style-type:none; margin:0; padding:0; }  
-    #countriesCloud ul li { float:left; margin:0 10px; height:35px;}  
-
-	#seriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left;}  
-    #seriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
-    #seriesCloud ul { list-style-type:none; margin:0; padding:0; }  
-    #seriesCloud ul li { float:left; margin:0 10px; height:35px;}  
-
-	#mugsCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left; }  
-    #mugsCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
-    #mugsCloud ul li { text-align: left; }
-    
-    li { cursor: pointer; }
-    .selected { color: red; }
-</style>
-
 <div id="countriesCloud">
 	<h2>Countries</h2>
 	<ul id="countriesList"></ul>
@@ -45,7 +26,7 @@ $(function() {
 
 	ReloadCountries();
 	ReloadSeries();
-	//ReloadMugs();
+	// We don't load mugs list on initialization because of it's length
 });
 
 function ReloadCountries() {	

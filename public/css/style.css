@@ -9,33 +9,6 @@ body {
   	color: black;
 }
 
-a {
-	color: #0099CC;
-	text-decoration: none;
-}
-
-a:hover {
-	color: #00CCFF;
-}
-
-a img {
-  border: none;/*remove border for linked images*/
-}
-
-h1 {
-	font-size: 1.6em;
-	height: 20px;
-	padding-top: 0;
-}
-
-h2{
-	font-size: 1.2em;
-	height: 20px;
-	padding-top: 0;
-}
-
-.highlight {background-color:#FF9D9D;border-bottom:#F30 1px solid;border-top:#F30 1px solid;padding: 4px 10px}
-
 /***** Main Layout ****/
 #container {
   	width: 100%;
@@ -48,3 +21,17 @@ h2{
   	text-align: left;
 	padding: 100px 20px 20px 20px;
 }
+
+#countriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left;}  
+#countriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
+#countriesCloud ul { list-style-type:none; margin:0; padding:0; }  
+#countriesCloud ul li { float:left; margin:0 10px; height:35px; cursor: pointer; }  
+
+#seriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left;}  
+#seriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
+#seriesCloud ul { list-style-type:none; margin:0; padding:0; }  
+#seriesCloud ul li { float:left; margin:0 10px; height:35px; cursor: pointer; }  
+
+#mugsCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left; }  
+#mugsCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
+#mugsCloud ul li { text-align: left; cursor: pointer; }
