@@ -10,10 +10,6 @@ URL:        http://jquery-ui.googlecode.com/files/jquery-ui-1.8.10.zip
 Файлы:      public/js/jquery-ui.js
 			public/css/redmond/*
 
-Библиотека:	jQuery.Format версии 1.2
-URL:		https://github.com/asual/jquery-format
-Файлы:		public/js/jquery.format.js
-
 PHP:
 
 Библиотека:	ZEND Framework версии 1.11.11
