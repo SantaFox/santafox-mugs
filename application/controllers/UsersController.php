@@ -15,7 +15,7 @@
  * @package		site
  * @subpackage	controllers
  */
-class UserController extends Zend_Controller_Action {
+class UsersController extends Zend_Controller_Action {
 
     /**
      * Переменная для хранения ссылки на текущую авторизацию
@@ -38,11 +38,12 @@ class UserController extends Zend_Controller_Action {
 	}
 	
     /**
-     * Действие контроллера - стандартный обработчик /index
+     * Действие контроллера - обработка логина
      *
      * Выполняет непосредственно авторизацию.<br />
-     * Если вызов делается методом GET (то есть обычным заходом на страницу, то рендерится форма запроса.<br />
-     * Если происходит вызов POST, то сначала форма проверяется на заполненность (если что-то не так - то запрашивается снова),
+     * Если вызов делается методом GET (то есть обычным заходом на страницу), то редиректим на основную страницу.<br />
+     * Если происходит вызов POST, то делаем попытку авторизации. Если AJAX - то тихо отдаем результаты,
+     * если запрос был результатом обычной формы - то надо как-то отдать ошибку.
      * после чего создается <b>Zend_Auth_Adapter_DbTable</b>.<br />
      * При удачной авторизации сохраняются три поля из базы:
      * <ul>
@@ -52,46 +53,46 @@ class UserController extends Zend_Controller_Action {
      * </ul>
      *
      * @uses	getAuthAdapter()
-     * @uses	getLoginForm()
      */
-	public function indexAction() {
+	public function loginAction() {
 		$log = Zend_Registry::get('log');
-		
-		if (!$this->getRequest()->isPost()) {
-			$this->view->form = $this->getLoginForm();
-			 $this->render('login');
+
+        $request = $this->getRequest();
+        
+		// Сначала предотвратим некорректный вызов процедуры
+		if ( !$request->isPost() ) {
+			$this->_redirect("/index");
 		}
-		else {
-			$form = $this->getLoginForm();
-			
-			 if (!$form->isValid($_POST)) {
-			 	$this->view->form = $form;
-				 return $this->render('login');
-			 }
-			 $values = $form->getValues();
-			 $authAdapter = $this->getAuthAdapter();
-			 
-			 $authAdapter->setIdentity($values['username'])
-			 			->setCredential($values['password']);
+		Zend_Debug::dump($_POST);
+		// Делаем авторизацию
+		if ( isset($_POST['login']) && !empty($_POST['login']) ) {
+			$authAdapter = $this->getAuthAdapter();
+			$authAdapter->setIdentity($_POST['login'])
+			 			->setCredential($_POST['password']);
 			 			
-				$authResult = $this->_auth->authenticate($authAdapter);
-				
-				if ( $authResult->isValid() ) {
-					$storage = $this->_auth->getStorage();
-					$storage->write($authAdapter->getResultRowObject(array(
+			$authResult = $this->_auth->authenticate($authAdapter);
+			
+			if ( $authResult->isValid() ) {
+				$storage = $this->_auth->getStorage();
+				$storage->write($authAdapter->getResultRowObject(array(
 					'id', 'userName', 'userRole')));
-					
-					$log->info('Удачная авторизация пользователя ' . $this->_auth->getIdentity()->userName);
 				
-					$this->_redirect("/items");
-				}
-				else {
-					$this->view->form = $form;
-					$this->view->authError = true;
-				 return $this->render('login');
-				}
+				$log->info('Удачная авторизация пользователя ' . $this->_auth->getIdentity()->userName);
+			
+				$this->_redirect("/index");
+			}
+			else {
+				$this->_redirect("/index");
+			}
 		}
-	}
+/*		
+        $isAjax = $request->isXmlHttpRequest();
+        if ( !$isAjax ) {
+			return;
+        } else
+			return;
+        }
+*/	}
 	
     /**
      * Возвращает специальный адаптер для авторизации по записям в таблице

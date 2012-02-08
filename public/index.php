@@ -8,13 +8,14 @@ defined('APPLICATION_PATH')
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
 
-// Я не уверен что это здесь нужно
-
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../library'),
     get_include_path(),
 )));
+
+// Moving our session cookies original files to separate directory
+session_save_path(realpath(APPLICATION_PATH . '/../sessions'));
 
 /** Zend_Application */
 require_once 'Zend/Application.php';
