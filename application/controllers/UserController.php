@@ -15,7 +15,7 @@
  * @package		site
  * @subpackage	controllers
  */
-class LoginController extends Zend_Controller_Action {
+class UserController extends Zend_Controller_Action {
 
     /**
      * Переменная для хранения ссылки на текущую авторизацию
@@ -106,7 +106,7 @@ class LoginController extends Zend_Controller_Action {
 		$authAdapter = new Zend_Auth_Adapter_DbTable(
 			  $db,
 			  'users',
-			  'userName',
+			  'userLogin',
 			  'userPassword'
 		);
 		
@@ -114,41 +114,6 @@ class LoginController extends Zend_Controller_Action {
 		//$authAdapter->setCredentialTreatment("SHA1(?)");
 		
 		return $authAdapter;
-	}
-	
-    /**
-     * Создает простую форму для авторизации
-     *
-     * К полям добавляются стандартные правила валидации.
-     *
-     * @return	Zend_Form
-     */
-	public function getLoginForm() {
-		$form = new Zend_Form();
-		$form->setAction('/login')
-			   ->setMethod('post');
- 
-		// Create and configure username element:
-		$username = $form->createElement('text', 'username', array('label' => 'Username:'));
-		$username->addValidator('alnum')
-				   ->addValidator('regex', false, array('/^[a-z]+/'))
-				   ->addValidator('stringLength', false, array(3, 20))
-				   ->setRequired(true)
-				   ->addFilter('StringToLower');
- 
-		// Create and configure password element:
-		$password = $form->createElement('password', 'password', array('label' => 'Password:'));
-		$password->addValidator('StringLength', false, array(3,20))
-				   ->setRequired(true);
- 
-		// Add elements to form:
-		
-		$form->addElement($username)
-			   ->addElement($password)
-			   // use addElement() as a factory to create 'Login' button:
-			   ->addElement('submit', 'login', array('label' => 'Login'));
-		  
-		return $form;
 	}
 
     /**
