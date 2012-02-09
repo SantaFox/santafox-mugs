@@ -60,6 +60,13 @@ class Application_Model_DbTable_Mugs extends Zend_Db_Table_Abstract {
 					   		  array('serieName'))
     				   ->order(array('countryName', 'serieName', 'mugName'));
         
+        if ($userId != '') {
+        	$select->join('mugs2users',
+        				  'mugs.id = mugs2users.mugId',
+        				  array() );
+            $select->where('mugUserId = ?', (int)$userId);
+        }
+
         if ($countryId != '') {
             $select->where('mugCountryId = ?', (int)$countryId);
         }

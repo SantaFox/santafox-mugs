@@ -47,8 +47,24 @@ class ApiController extends Zend_Controller_Action {
         
         // Получаем код клиента из запроса и вызываем модель
         $countriesTable = new Application_Model_DbTable_Countries();
-        $result = $countriesTable->getCountriesCloud();
         
+        // ВНИМАНИЕ!!! ЭТО НЕПРАВИЛЬНО С ТОЧКИ ЗРЕНИЯ API - КАЖДЫЙ ВЫЗОВ ДОЛЖЕН ИМЕТЬ ПОЛНУЮ ИНФОРМАЦИЮ
+        // И НИКАК НЕ ЗАВИСЕТЬ ОТ СЕССИИ БРАУЗЕРА!
+        $auth = Zend_Auth::getInstance();
+        if ( $auth->hasIdentity() ) {
+        	$userId = $auth->getIdentity()->id;
+        	$userSettingsTable = new Application_Model_DbTable_UserSettings();
+        	$settingShowOnlyOwnMugs = $userSettingsTable->getUserSetting($userId, 'ShowOnlyOwnMugs', 'FALSE');
+
+        	if ( $settingShowOnlyOwnMugs == 'TRUE' ) {
+        		$result = $countriesTable->getCountriesCloud($userId);
+        	} else {
+        		$result = $countriesTable->getCountriesCloud();
+        	}
+        } else {
+        	$result = $countriesTable->getCountriesCloud();
+    	}
+
         $log->info("Был вызван api/countries напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
 
         $this->_helper->json($result->toArray());
@@ -122,11 +138,26 @@ class ApiController extends Zend_Controller_Action {
         // Разбор переданных параметров
 		$countryId = $request->getParam('countryId');
 		$serieId = $request->getParam('serieId');
-		$userId = $request->getParam('userId');
 
         // Получаем код клиента из запроса и вызываем модель
         $mugsTable = new Application_Model_DbTable_Mugs();
-        $result = $mugsTable->getMugsList($countryId, $serieId, $userId);
+        
+        // ВНИМАНИЕ!!! ЭТО НЕПРАВИЛЬНО С ТОЧКИ ЗРЕНИЯ API - КАЖДЫЙ ВЫЗОВ ДОЛЖЕН ИМЕТЬ ПОЛНУЮ ИНФОРМАЦИЮ
+        // И НИКАК НЕ ЗАВИСЕТЬ ОТ СЕССИИ БРАУЗЕРА!
+        $auth = Zend_Auth::getInstance();
+        if ( $auth->hasIdentity() ) {
+        	$userId = $auth->getIdentity()->id;
+        	$userSettingsTable = new Application_Model_DbTable_UserSettings();
+        	$settingShowOnlyOwnMugs = $userSettingsTable->getUserSetting($userId, 'ShowOnlyOwnMugs', 'FALSE');
+
+        	if ( $settingShowOnlyOwnMugs == 'TRUE' ) {
+        		$result = $mugsTable->getMugsList($countryId, $serieId, $userId);
+        	} else {
+        		$result = $mugsTable->getMugsList($countryId, $serieId);
+        	}
+        } else {
+        	$result = $mugsTable->getMugsList($countryId, $serieId);
+    	}
         
         $log->info("Был вызван api/mugs напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
 

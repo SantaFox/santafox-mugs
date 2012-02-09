@@ -57,10 +57,17 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
 					   ->group('countries.id')
     				   ->order('countryName');
         
+        if ($userId != '') {
+        	$select->join('mugs2users',
+        				  'mugs.id = mugs2users.mugId',
+        				  array() );
+            $select->where('mugUserId = ?', (int)$userId);
+        }
+
         if ($serieId != '') {
             $select->where('mugSerieId = ?', (int)$serieId);
         }
-    	
+
     	return $this->fetchAll($select);
 	}
 
