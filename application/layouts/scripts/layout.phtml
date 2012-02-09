@@ -24,6 +24,39 @@
 <body>
 <!-- Panel -->
 <div id="toppanel">
+<?php if ($this->auth->hasIdentity()) : ?>
+	<div id="panel">
+		<div class="content clearfix">
+			<div class="left">
+				<h1><?php echo $this->escape($this->auth->getIdentity()->userName); ?></h1>
+<?php if ( isset($this->auth->getIdentity()->userAvatar) ) : ?>
+				<img class="userAvatar" src="/images/avatars/<?php echo $this->escape($this->auth->getIdentity()->userAvatar); ?>" />
+<?php else : ?>
+				<img class="userAvatar" src="/images/noavatar.jpg" />
+<?php endif; ?>
+			</div>
+			<div class="left">
+
+			</div>
+			<div class="left right">			
+
+			</div>
+		</div>
+	</div> <!-- /login -->
+	<!-- The tab on top -->	
+	<div class="tab">
+		<ul class="login">
+			<li class="left">&nbsp;</li>
+			<li>Hello,&nbsp;<?php echo $this->escape($this->auth->getIdentity()->userName); ?></li>
+			<li class="sep">|</li>
+			<li id="toggle">
+				<a id="open" class="open" href="#">Open User panel</a>
+				<a id="close" style="display: none;" class="close" href="#">Close panel</a>			
+			</li>
+			<li class="right">&nbsp;</li>
+		</ul> 
+	</div> <!-- / top -->
+<?php else : ?>
 	<div id="panel">
 		<div class="content clearfix">
 			<div class="left">
@@ -74,6 +107,8 @@
 			<li class="right">&nbsp;</li>
 		</ul> 
 	</div> <!-- / top -->
+<?php endif; ?>
+
 </div> <!--panel -->
 <div id="container">
 	<div id="content">

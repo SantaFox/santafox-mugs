@@ -74,8 +74,7 @@ class UsersController extends Zend_Controller_Action {
 			
 			if ( $authResult->isValid() ) {
 				$storage = $this->_auth->getStorage();
-				$storage->write($authAdapter->getResultRowObject(array(
-					'id', 'userName', 'userRole')));
+				$storage->write($authAdapter->getResultRowObject(null, 'userPassword'));
 				
 				$log->info('Удачная авторизация пользователя ' . $this->_auth->getIdentity()->userName);
 			
