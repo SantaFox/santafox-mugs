@@ -63,17 +63,11 @@
   	background: url(../images/userpanel/tab_m.png) repeat-x 0 0;
 }
 
-.tab ul.login li a {
-	color: #15ADFF;
-}
+.tab ul.login li a { color: #15ADFF; }
+.tab ul.login li a:hover { color: white; }
+.tab .sep { color:#414141; }
 
-.tab ul.login li a:hover {
-	color: white;
-}
-
-.tab .sep {color:#414141}
-
-.tab a.open, .tab a.close {
+.tab a.panelOpenLink, .tab a.panelCloseLink {
 	height: 20px;
 	line-height: 20px !important;
 	padding-left: 30px !important;
@@ -84,10 +78,10 @@
 	top: 11px;
 }
 
-.tab a.open {background: url(../images/userpanel/bt_open.png) no-repeat left 0;}
-.tab a.close {background: url(../images/userpanel/bt_close.png) no-repeat left 0;}
-.tab a:hover.open {background: url(../images/userpanel/bt_open.png) no-repeat left -19px;}
-.tab a:hover.close {background: url(../images/userpanel/bt_close.png) no-repeat left -19px;}
+.tab a.panelOpenLink {background: url(../images/userpanel/bt_open.png) no-repeat left 0;}
+.tab a.panelCloseLink {background: url(../images/userpanel/bt_close.png) no-repeat left 0;}
+.tab a:hover.panelOpenLink {background: url(../images/userpanel/bt_open.png) no-repeat left -19px;}
+.tab a:hover.panelCloseLink {background: url(../images/userpanel/bt_close.png) no-repeat left -19px;}
 
 /* sliding panel */
 #toppanel {
@@ -112,69 +106,18 @@
 	display: none;
 }
 
-#panel h1 {
-	font-size: 1.6em;
-	padding: 5px 0 10px;
-	margin: 0;
-	color: white;
-}
+#panel h1 { font-size: 1.6em; padding: 5px 0 10px; margin: 0; color: white; }
+#panel h2 { font-size: 1.2em; padding: 10px 0 5px; margin: 0; color: white; }
+#panel p { margin: 5px 0; padding: 0; }
+#panel a { text-decoration: none; color: #15ADFF; }
+#panel a:hover { color: white; }
+#panel a-lost-pwd { display: block; float: left; }
 
-#panel h2{
-	font-size: 1.2em;
-	padding: 10px 0 5px;
-	margin: 0;
-	color: white;
-}
-
-#panel p {
-	margin: 5px 0;
-	padding: 0;
-}
-
-#panel a {
-	text-decoration: none;
-	color: #15ADFF;
-}
-
-#panel a:hover {
-	color: white;
-}
-
-#panel a-lost-pwd {
-	display: block;
-	float: left;
-}
-
-#panel .content {
-	width: 960px;
-	margin: 0 auto;
-	padding-top: 15px;
-	text-align: left;
-	font-size: 0.85em;
-}
-
-#panel .content .left {
-	width: 280px;
-	float: left;
-	padding: 0 15px;
-	border-left: 1px solid #333;
-}
-
-#panel .content .right {
-	border-right: 1px solid #333;
-}
-
-#panel .content form {
-	margin: 0 0 10px 0;
-}
-
-#panel .content label {
-	float: left;
-	padding-top: 8px;
-	clear: both;
-	width: 280px;
-	display: block;
-}
+#panel .content { width: 960px; margin: 0 auto; padding-top: 15px; text-align: left; font-size: 0.85em; }
+#panel .content .left { width: 280px; float: left; padding: 0 15px; border-left: 1px solid #333; }
+#panel .content .right { border-right: 1px solid #333; }
+#panel .content form { margin: 0 0 10px 0; }
+#panel .content label { float: left; padding-top: 8px; clear: both; width: 280px; display: block; }
 
 #panel .content input.field {
 	border: 1px #1A1A1A solid;

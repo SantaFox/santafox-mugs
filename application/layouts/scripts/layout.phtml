@@ -35,11 +35,15 @@
 				<img class="userAvatar" src="/images/noavatar.jpg" />
 <?php endif; ?>
 			</div>
-			<div class="left">
-
+			<div id="userSettings" class="left">
+				<input type="checkbox" id="userLimitToOwn" /><label for="userLimitToOwn">Show only own Mugs</label>
 			</div>
-			<div class="left right">			
-
+			<div class="left right">
+<?php if ( $this->auth->getIdentity()->userRole == 'admin' ) : ?>
+				<a href="/admin/index">Access Administrator page</a>
+<?php else : ?>
+<?php endif; ?>
+				<a class="bt_login" href="#">Logoff</a>
 			</div>
 		</div>
 	</div> <!-- /login -->
@@ -50,8 +54,8 @@
 			<li>Hello,&nbsp;<?php echo $this->escape($this->auth->getIdentity()->userName); ?></li>
 			<li class="sep">|</li>
 			<li id="toggle">
-				<a id="open" class="open" href="#">Open User panel</a>
-				<a id="close" style="display: none;" class="close" href="#">Close panel</a>			
+				<a id="panelOpenLink" class="panelOpenLink" href="#">Open User panel</a>
+				<a id="panelCloseLink" style="display: none;" class="panelCloseLink" href="#">Close panel</a>			
 			</li>
 			<li class="right">&nbsp;</li>
 		</ul> 
@@ -61,10 +65,10 @@
 		<div class="content clearfix">
 			<div class="left">
 				<h1>Welcome to Starbucks Mugs Collections</h1>
-				<h2>Sliding login panel Demo with jQuery</h2>		
-				<p class="grey">You can put anything you want in this sliding panel: videos, audio, images, forms... The only limit is your imagination!</p>
-				<h2>Download</h2>
-				<p class="grey">To download this script go back to <a href="http://web-kreation.com/index.php/tutorials/nice-clean-sliding-login-panel-built-with-jquery" title="Download">article &raquo;</a></p>
+				<h2>cc</h2>		
+				<p class="grey">ttt</p>
+				<h2>Look</h2>
+				<p class="grey">yyy</p>
 			</div>
 			<div class="left">
 				<!-- Login Form -->
@@ -101,8 +105,8 @@
 			<li>Hello Guest!</li>
 			<li class="sep">|</li>
 			<li id="toggle">
-				<a id="open" class="open" href="#">Log In | Register</a>
-				<a id="close" style="display: none;" class="close" href="#">Close Panel</a>			
+				<a id="panelOpenLink" class="panelOpenLink" href="#">Log In | Register</a>
+				<a id="panelCloseLink" style="display: none;" class="panelCloseLink" href="#">Close Panel</a>			
 			</li>
 			<li class="right">&nbsp;</li>
 		</ul> 

@@ -1,17 +1,19 @@
 // User panel initialization
 // http://web-kreation.com/index.php/tutorials/nice-clean-sliding-login-panel-built-with-jquery/
 jQuery(document).ready( function() {
-	$("#open").click(function(){
+	$("#panelOpenLink").click(function(){
 		$("div#panel").slideDown("slow");
 	});	
 	
-	$("#close").click(function(){
+	$("#panelCloseLink").click(function(){
 		$("div#panel").slideUp("slow");	
 	});		
 
 	$("#toggle a").click(function () {
 		$("#toggle a").toggle();
 	});
+	
+	$("#userSettings input").button();
 });
 	
 
