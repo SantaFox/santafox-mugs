@@ -36,7 +36,7 @@ function ReloadCountries() {
 		$.each(data, function() { 
 			$("<li>").text(this.countryName)
 					 .data('id', this.id)
-					 .data('mugsCount', this.mugsCount)
+					 .data('mugsCountryCount', this.mugsCountryCount)
 					 .appendTo('#countriesList');  
 		});
 		ResizeTags( $('#countriesList li') );

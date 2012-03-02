@@ -53,15 +53,15 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
 									'countryName'))
 					   ->join('mugs',
 					   		  'countries.id = mugs.mugCountryId',
-					   		  array('mugsCount' => 'COUNT(*)'))
+					   		  array('mugsCountryCount' => 'COUNT(mugs.id)') )
 					   ->group('countries.id')
     				   ->order('countryName');
         
         if ($userId != '') {
-        	$select->join('mugs2users',
-        				  'mugs.id = mugs2users.mugId',
-        				  array() );
-            $select->where('mugUserId = ?', (int)$userId);
+        	$select->joinLeft('mugs2users',
+        				  'mugs.id = mugs2users.mugId AND mugs2users.mugUserId = ' . $userId,
+        				  array('mugsUserCount' => 'COUNT(mugs2users.id)') );
+            $select->having('mugsUserCount > 0');
         }
 
         if ($serieId != '') {
