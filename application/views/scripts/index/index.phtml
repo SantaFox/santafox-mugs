@@ -34,10 +34,17 @@ function ReloadCountries() {
     $.getJSON("api/countries", function(data) {
     	$('#countriesList').empty();
 		$.each(data, function() { 
-			$("<li>").text(this.countryName)
-					 .data('id', this.id)
-					 .data('mugsCountryCount', this.mugsCountryCount)
-					 .appendTo('#countriesList');  
+			var li = $("<li>");
+			if ( 0 == $('#userSettings').length ) {
+				// Пользователя нет - список обычный
+				li.text(this.countryName);
+				li.data('mugsCount', this.mugsCountryCount);
+			} else {
+				li.text(this.countryName + ' (' + this.mugsUserCount + '/' + this.mugsCountryCount + ')');
+				li.data('mugsCount', this.mugsUserCount)
+			}
+			li.data('id', this.id);
+			li.appendTo('#countriesList');
 		});
 		ResizeTags( $('#countriesList li') );
 	});

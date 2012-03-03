@@ -36,7 +36,8 @@
 <?php endif; ?>
 			</div>
 			<div id="userSettings" class="left">
-				<input type="checkbox" id="userLimitToOwn" /><label for="userLimitToOwn">Show only own Mugs</label>
+				<input type="checkbox" id="userShowOnlyOwnMugs" checked="checked"/><label for="userShowOnlyOwnMugs">Show only own Mugs</label>
+				<input type="checkbox" id="userShowMugsCount" /><label for="userShowMugsCount">Show Mugs count</label>
 			</div>
 			<div class="left right">
 <?php if ( $this->auth->getIdentity()->userRole == 'admin' ) : ?>

@@ -25,6 +25,16 @@ class IndexController extends Zend_Controller_Action {
 		// Читаем ACL из модели и отдаем его шаблону, чтобы он заблокировал недоступные кнопки.
 		// Но как-то это кривовато, надо придумать что-нибудь поэлегантнее.
 		$this->view->acl = Application_Model_Acl::getACL();
+		
+		$auth = Zend_Auth::getInstance();
+        if ( $auth->hasIdentity() ) {
+        	$userId = $auth->getIdentity()->id;
+        	$this->view->userId = $userId;
+        	
+        	// Теперь сюда надо загрузить настройки пользователя, чтобы форма отработала начальное положение переключателей
+        	$settingsTable = new Application_Model_DbTable_Settings();
+        	$this->view->userSettings = $settingsTable->getUserSettings($userId);
+        }
     }
 
 }

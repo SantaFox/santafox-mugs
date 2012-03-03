@@ -33,8 +33,9 @@ class UsersController extends Zend_Controller_Action {
 	 * и дублирует ее в представление для вывода информации о пользователе.
      */
 	public function init() {
-		$this->_auth = Zend_Auth::getInstance();
-		$this->view->auth = $this->_auth;
+	// Закомментарено, так как уже присваивается в plugins/AccessControl.php
+//		$this->_auth = Zend_Auth::getInstance();
+//		$this->view->auth = $this->_auth;
 	}
 	
     /**

@@ -53,9 +53,9 @@ class ApiController extends Zend_Controller_Action {
         $auth = Zend_Auth::getInstance();
         if ( $auth->hasIdentity() ) {
         	$userId = $auth->getIdentity()->id;
-        	$userSettingsTable = new Application_Model_DbTable_UserSettings();
-        	$settingShowOnlyOwnMugs = $userSettingsTable->getUserSetting($userId, 'ShowOnlyOwnMugs', 'FALSE');
-        	$settingShowMugsCount = $userSettingsTable->getUserSetting($userId, 'ShowMugsCount', 'FALSE');
+        	$settingsTable = new Application_Model_DbTable_Settings();
+        	$settingShowOnlyOwnMugs = $settingsTable->getUserSetting($userId, 'ShowOnlyOwnMugs');
+        	$settingShowMugsCount = $settingsTable->getUserSetting($userId, 'ShowMugsCount');
 
         	if ( $settingShowOnlyOwnMugs == 'TRUE' ) {
         		$result = $countriesTable->getCountriesCloud($userId);

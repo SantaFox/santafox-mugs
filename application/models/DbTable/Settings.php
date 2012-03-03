@@ -17,7 +17,7 @@
  * @package		site
  * @subpackage	dbtables
  */
-class Application_Model_DbTable_UserSettings extends Zend_Db_Table_Abstract {
+class Application_Model_DbTable_Settings extends Zend_Db_Table_Abstract {
 
 	/**#@+
 	 * Эти константы используются для связи с таблицей
@@ -44,14 +44,12 @@ class Application_Model_DbTable_UserSettings extends Zend_Db_Table_Abstract {
 	public function getUserSettings($userId) {
 		$select = $this->select()
 		               ->setIntegrityCheck(false)      // Странная идея, надо доразобраться
-					   ->from('settings2users',
-							  array('id',
-									'settingValue') )
-					   ->join('settings',
-					   		  'settings.id = settings2users.settingId',
-					   		  array('settingName',
-					   				'settingDefault') )
-					   ->where('settingUserId = ?', (int)$userId)
+					   ->from('settings',
+							  array('settingName',
+									'settingValue' => new Zend_Db_Expr('CASE WHEN settingValue IS NOT NULL THEN settingValue ELSE settingDefault END')))
+					   ->joinLeft('settings2users',
+					   		  'settings.id = settings2users.settingId AND settings2users.settingUserId = ' . $userId,
+					   		  array() )
 					   ->order('settingName');
 
     	return $this->fetchAll($select);
@@ -68,18 +66,18 @@ class Application_Model_DbTable_UserSettings extends Zend_Db_Table_Abstract {
      */
 	public function getUserSetting($userId, $settingName) {
 		$select = $this->select()
+		               ->setIntegrityCheck(false)      // Странная идея, надо доразобраться
 					   ->from('settings',
-							  array('SettingName',
-									'settingDefault'))
+							  array('settingName',
+									'settingValue' => new Zend_Db_Expr('CASE WHEN settingValue IS NOT NULL THEN settingValue ELSE settingDefault END')))
 					   ->joinLeft('settings2users',
 					   		  'settings.id = settings2users.settingId AND settings2users.settingUserId = ' . $userId,
-					   		  array('id',
-					   				'settingValue') )
+					   		  array() )
 					   ->where('settingName = ?', $settingName);
 		$result = $this->fetchRow($select);
-
+/*
 		if ( isset($result) ) {
-			if ( isset($result['settingValue']) {
+			if ( isset($result['settingValue']) ) {
 				return $result['settingValue'];
 			} else {
 				return $result['settingDefault'];
@@ -88,6 +86,8 @@ class Application_Model_DbTable_UserSettings extends Zend_Db_Table_Abstract {
 			// Запрошена принципиально несуществующая настройка
 			return NIL;
 		}
+*/
+		return $result['settingValue'];
 	}
 
 }
