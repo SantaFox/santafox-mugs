@@ -23,7 +23,7 @@ class Application_Model_DbTable_UserSettings extends Zend_Db_Table_Abstract {
 	 * Эти константы используются для связи с таблицей
 	 * @ignore
 	 */
-	protected $_name = 'userSettings';
+	protected $_name = 'settings';
 	protected $_primary = 'id';
 	/**#@-*/
 
@@ -43,9 +43,14 @@ class Application_Model_DbTable_UserSettings extends Zend_Db_Table_Abstract {
      */
 	public function getUserSettings($userId) {
 		$select = $this->select()
-					   ->from('userSettings',
-							  array('settingName',
-									'settingValue'))
+		               ->setIntegrityCheck(false)      // Странная идея, надо доразобраться
+					   ->from('settings2users',
+							  array('id',
+									'settingValue') )
+					   ->join('settings',
+					   		  'settings.id = settings2users.settingId',
+					   		  array('settingName',
+					   				'settingDefault') )
 					   ->where('settingUserId = ?', (int)$userId)
 					   ->order('settingName');
 
@@ -61,19 +66,27 @@ class Application_Model_DbTable_UserSettings extends Zend_Db_Table_Abstract {
      * @param	string $settingDefaultValue	Дефолтовое значение параметра
      * @return	null|string					Значение параметра
      */
-	public function getUserSetting($userId, $settingName, $settingDefaultValue=NULL) {
+	public function getUserSetting($userId, $settingName) {
 		$select = $this->select()
-					   ->from('userSettings',
-							  array('settingName',
-									'settingValue'))
-					   ->where('settingUserId = ?', (int)$userId)
+					   ->from('settings',
+							  array('SettingName',
+									'settingDefault'))
+					   ->joinLeft('settings2users',
+					   		  'settings.id = settings2users.settingId AND settings2users.settingUserId = ' . $userId,
+					   		  array('id',
+					   				'settingValue') )
 					   ->where('settingName = ?', $settingName);
 		$result = $this->fetchRow($select);
 
 		if ( isset($result) ) {
-			return $result['settingValue'];
+			if ( isset($result['settingValue']) {
+				return $result['settingValue'];
+			} else {
+				return $result['settingDefault'];
+			}
 		} else {
-			return $settingDefaultValue;
+			// Запрошена принципиально несуществующая настройка
+			return NIL;
 		}
 	}
 
