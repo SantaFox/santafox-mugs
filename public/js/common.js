@@ -1,22 +1,3 @@
-// User panel initialization
-// http://web-kreation.com/index.php/tutorials/nice-clean-sliding-login-panel-built-with-jquery/
-jQuery(document).ready( function() {
-	$("#panelOpenLink").click(function(){
-		$("div#panel").slideDown("slow");
-	});	
-	
-	$("#panelCloseLink").click(function(){
-		$("div#panel").slideUp("slow");	
-	});		
-
-	$("#toggle a").click(function () {
-		$("#toggle a").toggle();
-	});
-	
-	$("#userSettings input").button();
-});
-	
-
 // Скопипизжено отсюда: http://projects.joreteg.com/jquery-sliding-message/
 // Потом переработано под имеющуюся задачу
 jQuery.showMessage = function(message, extraClass){

@@ -16,6 +16,28 @@
 </div>
 
 <script type="text/javascript">  
+// User panel initialization
+// http://web-kreation.com/index.php/tutorials/nice-clean-sliding-login-panel-built-with-jquery/
+jQuery(document).ready( function() {
+	$("#panelOpenLink").click(function(){
+		$("div#panel").slideDown("slow");
+	});	
+	
+	$("#panelCloseLink").click(function(){
+		$("div#panel").slideUp("slow");	
+	});		
+
+	$("#toggle a").click(function () {
+		$("#toggle a").toggle();
+	});
+});
+</script> 
+
+<script type="text/javascript"> 
+	$("#userSettings input").button();
+</script>
+
+<script type="text/javascript">
 $(function() {
 	// Настраиваем все элементы так, чтобы при выборе одного все остальные освобождались
 	$('body').on('click', '#countriesList li', function() {

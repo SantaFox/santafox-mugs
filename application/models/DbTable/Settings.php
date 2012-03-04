@@ -52,7 +52,13 @@ class Application_Model_DbTable_Settings extends Zend_Db_Table_Abstract {
 					   		  array() )
 					   ->order('settingName');
 
-    	return $this->fetchAll($select);
+		$rowset = $this->fetchAll($select);
+		
+		foreach ($rowset as $row) {
+			$result[$row->settingName] = $row->settingValue;
+		}
+
+    	return $result;
 	}
 	
     /**
