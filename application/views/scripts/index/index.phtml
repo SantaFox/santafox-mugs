@@ -34,7 +34,42 @@ jQuery(document).ready( function() {
 </script> 
 
 <script type="text/javascript"> 
-	$("#userSettings input").button();
+	$("#userSettings input").button().change( function(e) {
+		// Need some workaround to serialize ALL buttons, checked and unchecked
+		var settingsForm = $("#userSettings input");
+		var uncheckedButtons = [];
+		
+		settingsForm.filter(':checkbox:not(:checked)').each(function () {
+			uncheckedButtons.push(encodeURIComponent(this.name) + '=off');
+		});
+		var serial = settingsForm.serialize() +
+					 (uncheckedButtons.length ? '&' + uncheckedButtons.join('&').replace(/%20/g, "+") : '');
+
+		$.post("api/update-settings", serial, function(response) {
+			if (response.status == "fail") {
+				$.showMessage(response.message, 'ui-state-error');
+			};
+			if (response.status == "success") {
+				$.showMessage(response.message);
+				switch (e.target.id) {
+					case 'userShowOnlyOwnMugs':
+						// Надо перезапрашивать списки, так как меняется список стран и серий
+						ReloadCountries();
+						ReloadSeries();
+						$('#mugsList').empty();
+						break;
+					case 'userShowMugsCount':
+						// Надо перерисовывать списки, так как меняется ширина выводимых строк
+						ReloadCountries();
+						ReloadSeries();
+						$('#mugsList').empty();
+						break;
+					default:
+						alert('Not defined setting. Please contact author');
+				}
+			};
+		});
+	});
 </script>
 
 <script type="text/javascript">
@@ -99,6 +134,7 @@ function ReloadMugs() {
 		});
 	});
 }
+
 
 function ResizeTags (li) {
 	var countMin = 0, countMax = 0;
