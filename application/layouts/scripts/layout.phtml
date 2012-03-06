@@ -37,15 +37,15 @@
 			</div>
 			<div id="userSettings" class="left">
 <?php if ( $this->userSettings['ShowOnlyOwnMugs'] == 'TRUE' ) : ?>
-				<input type="checkbox" id="userShowOnlyOwnMugs" checked="checked" />
+				<input type="checkbox" name="userShowOnlyOwnMugs" id="userShowOnlyOwnMugs" checked="checked" />
 <?php else : ?>
-				<input type="checkbox" id="userShowOnlyOwnMugs" />
+				<input type="checkbox" name="userShowOnlyOwnMugs" id="userShowOnlyOwnMugs" />
 <?php endif; ?>
 				<label for="userShowOnlyOwnMugs">Show only own Mugs</label>
 <?php if ( $this->userSettings['ShowMugsCount'] == 'TRUE' ) : ?>
-				<input type="checkbox" id="userShowMugsCount" checked="checked" />
+				<input type="checkbox" name="userShowMugsCount" id="userShowMugsCount" checked="checked" />
 <?php else : ?>
-				<input type="checkbox" id="userShowMugsCount" />
+				<input type="checkbox" name="userShowMugsCount" id="userShowMugsCount" />
 <?php endif; ?>
 				<label for="userShowMugsCount">Show Mugs count</label>
 			</div>

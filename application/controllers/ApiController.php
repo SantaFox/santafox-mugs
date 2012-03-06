@@ -53,9 +53,9 @@ class ApiController extends Zend_Controller_Action {
         $auth = Zend_Auth::getInstance();
         if ( $auth->hasIdentity() ) {
         	$userId = $auth->getIdentity()->id;
-        	$settingsTable = new Application_Model_DbTable_Settings();
-        	$settingShowOnlyOwnMugs = $settingsTable->getUserSetting($userId, 'ShowOnlyOwnMugs');
-        	$settingShowMugsCount = $settingsTable->getUserSetting($userId, 'ShowMugsCount');
+        	$settingsModel = new Application_Model_Settings();
+        	$settingShowOnlyOwnMugs = $settingsModel->getUserSetting($userId, 'ShowOnlyOwnMugs');
+        	$settingShowMugsCount = $settingsModel->getUserSetting($userId, 'ShowMugsCount');
 
         	if ( $settingShowOnlyOwnMugs == 'TRUE' ) {
         		$result = $countriesTable->getCountriesCloud($userId);
@@ -148,8 +148,8 @@ class ApiController extends Zend_Controller_Action {
         $auth = Zend_Auth::getInstance();
         if ( $auth->hasIdentity() ) {
         	$userId = $auth->getIdentity()->id;
-        	$userSettingsTable = new Application_Model_DbTable_UserSettings();
-        	$settingShowOnlyOwnMugs = $userSettingsTable->getUserSetting($userId, 'ShowOnlyOwnMugs', 'FALSE');
+        	$settingsModel = new Application_Model_Settings();
+        	$settingShowOnlyOwnMugs = $settingsModel->getUserSetting($userId, 'ShowOnlyOwnMugs');
 
         	if ( $settingShowOnlyOwnMugs == 'TRUE' ) {
         		$result = $mugsTable->getMugsList($countryId, $serieId, $userId);
@@ -163,5 +163,55 @@ class ApiController extends Zend_Controller_Action {
         $log->info("Был вызван api/mugs напрямую методом " . ($request->isPost() ? "POST" : "GET") . ", получено записей = " . count($result));
 
         $this->_helper->json($result->toArray());
+	}
+
+    /**
+     * (AJAX) Действие контроллера -  разбор и запись настроек пользователя
+     *
+	 * Процедура получает набор настроек, загружает текущий список настроек (для сверки)
+	 * и записывает обратно. Мы стараемся не оставлять "дефолтных" настроек, то есть все
+	 * настройки пользователя должны иметь значение. Сделано это для того, чтобы при изменении
+	 * дефолтной настройки параметры уже зарегестрированных пользователей не "поехали"
+	 *
+	 * @uses	Application_Model_DbTable_Settings::getUserSettings()
+	 * @uses	Application_Model_DbTable_Settings::setUserSetting()
+	 *
+	 * @return	array	Стандартный объект с полями status (success/fail) и message
+     */
+	public function updateSettingsAction() {
+        $log = Zend_Registry::get('log');
+        
+        $request = $this->getRequest();
+        
+		// Сначала предотвратим некорректный вызов процедуры
+        $isAjax = $request->isXmlHttpRequest();
+        if (!$isAjax) {
+            $log->alert('Попытка вызова api/updateSettings напрямую, без AJAX');
+            die();
+        }
+
+		// Загружаем имеющиеся параметры пользователя
+		$auth = Zend_Auth::getInstance();
+       	$userId = $auth->getIdentity()->id;
+       	$settingsModel = new Application_Model_Settings();
+       	$userSettings = $settingsModel->getUserSettings($userId);
+       	
+       	$substTable = array(
+       		'on' => 'TRUE',
+       		'off' => 'FALSE'
+       	);
+       	
+       	$settingsUpdated = 0;
+       	foreach ($userSettings as $key=>$setting) {
+       		$paramValue = $request->getParam('user' . $key);
+       		$newValue = $substTable[$paramValue];
+       		if ( $newValue != $setting ) {
+       			$settingsModel->setUserSetting($userId, $key, $newValue);
+       			$settingsUpdated += 1;
+       		}
+       	}
+		
+		$result = array( 'status' => 'success', 'message' => "{$settingsUpdated} user settings updated successfully" );
+		$this->_helper->json($result);
 	}
 }

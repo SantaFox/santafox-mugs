@@ -61,19 +61,20 @@ class Application_Model_Acl {
 
 			self::$_acl->allow('guest', 'index', 'index')						// Неавторизованные пользователи видят сайт
 					   ->allow('guest', 'api',									// и ТЕОРЕТИЧЕСКИ имеют доступ к API
-					   		   array('countries', 'series', 'mugs') )
-					   ->allow('guest', 'admin', array('index','acquire', 'proxy', 'countries', 'series', 'mugs', 'add-mug'));	// временно
-					   		   
+					   		   array('countries', 'series', 'mugs') );
+
 			self::$_acl->allow('guest', 'users', 'profile')						// профили пользователей
 					   ->allow('guest', 'users',								// и регистрацию/логин
 					   		   array('register', 'login') );
 
 			self::$_acl->allow('user', 'users', 'logout')						// Авторизованные пользователи вылогиниваются
+					   ->allow('user', 'api', 'update-settings')
 					   ->deny('user', 'users',									// и не могут заново зарегестрироваться
 					   		   array('register', 'login') );
 			
 			self::$_acl->allow('admin', 'admin',								// Исключительно админские ресурсы
-							   array('index') );
+					   		   array('index', 'acquire', 'proxy',
+					   		         'countries', 'series', 'mugs', 'add-mug') );
 		}
  
 		return self::$_acl;

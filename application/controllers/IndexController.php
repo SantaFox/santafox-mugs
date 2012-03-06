@@ -32,8 +32,8 @@ class IndexController extends Zend_Controller_Action {
         	$this->view->userId = $userId;
         	
         	// Теперь сюда надо загрузить настройки пользователя, чтобы форма отработала начальное положение переключателей
-        	$settingsTable = new Application_Model_DbTable_Settings();
-        	$this->view->userSettings = $settingsTable->getUserSettings($userId);
+        	$settingsModel = new Application_Model_Settings();
+        	$this->view->userSettings = $settingsModel->getUserSettings($userId);
         }
     }
 
