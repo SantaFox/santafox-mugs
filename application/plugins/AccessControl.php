@@ -60,7 +60,7 @@ class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 				$log->debug("AccessControl: {$module}/{$controller}/{$privilege} not allowed for AJAX call from " . ( ( 'guest' == $role ) ? "unauthorized user" : "user {$user} ({$role})") );
 				$result = array(
 					'status' => 'fail',
-					'message' => "Доступ к запрошенному ресурсу запрещен " . ( ( 'guest' == $role ) ? "неавторизованному пользователю" : "пользователю {$user} с ролью {$role}" )
+					'message' => "Access forbidden for " . ( ( 'guest' == $role ) ? "unauthorized user" : "user {$user} with role {$role}" )
 					);
 				$jsonHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Json');
 				$jsonHelper->sendJson( $result );
