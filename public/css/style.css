@@ -2,7 +2,7 @@ html, body {border: 0; margin: 0; padding: 0;}
 
 body {
   	font: 85%/0.9 arial, helvetica, sans-serif;
-	background: #99A989 url(../images/bg.jpg) repeat 0 0;
+	background: #F9F9F0 url(../images/body-bg.png) repeat 0 0;
   	line-height: 130%;
   	width: 100%;
   	min-width: 970px;
