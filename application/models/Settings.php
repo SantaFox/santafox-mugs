@@ -84,35 +84,33 @@ class Application_Model_Settings {
      * @return	void
      */
 	public function setUserSetting($userId, $settingName, $settingValue) {
-		// Находим нужную запись и обрабатываем исключение
+		// Находим идентификатор параметра (и генерим исключение, если не находим)
+		// TODO: Implement an exception
 		$settingsTable = new Application_Model_DbTable_Settings();
 		$settingId = $settingsTable->getIdByName($settingName);
 
+		// Находим идентификатор строки с нужным параметром
 		$settings2usersTable = new Application_Model_DbTable_Settings2Users();
-		$rows = $settings2usersTable->findByUserAndSetting($userId, $settingId);
-		if (count($rows) == 0) {
-			throw new Zend_Exception ("Запись с userId = {$userId} и settingName = {$settingName} не найдена");
-		};
-		$row = $rows->current();
-
-$row->settingValue = $settingValue;
-$row->save();
-//
-		// Зачем-то обрабатываем ситуацию, когда передан пустой $params
-//		$iChanged = count($params);
-//		if ( $iChanged == 0 ) {
-//			return 0;
-//		}
-//		
-		// Теперь делаем непосредственно операцию в базе
-//		try {
-//			$row->setFromArray($params);
-//			$row->save();
-//		} catch (Zend_Exception $e) {
-			// Если возникла ошибка, то надо перегенерить ее и отдать дальше
-//			throw new Zend_Exception ('Ошибка базы данных', -1, $e);
-//		}
-//		return;
+		$rowId = $settings2usersTable->findByUserAndSetting($userId, $settingId);
+		
+		if ( $rowId === NULL) {
+			// Add new record
+			try {
+				$settings2usersTable->addSettingValue($userId, $settingId, $settingValue);
+			} catch (Zend_Exception $e) {
+				// Если возникла ошибка, то надо перегенерить ее и отдать дальше
+				throw new Zend_Exception ('Database error during adding new setting', -1, $e);
+			}
+		} else {
+			// Update existing record
+			try {
+				$settings2usersTable->updateSettingValue($rowId, $settingValue);
+			} catch (Zend_Exception $e) {
+				// Если возникла ошибка, то надо перегенерить ее и отдать дальше
+				throw new Zend_Exception ('Database error during modifying existing setting', -1, $e);
+			}
+		}
+		return;
 	}
 
 }

@@ -31,15 +31,23 @@ class Application_Model_DbTable_Settings2Users extends Zend_Db_Table_Abstract {
 		$select = $this->select()
 			->where('settingUserId = ?', $userId)
 			->where('settingId = ?', $settingId);
-        return $this->fetchAll($select);
+		$row = $this->fetchRow($select);
+
+		if ($row === NULL) {
+			return NULL;
+		} else {
+			return $row->id;
+		}
     }
     
     public function updateSettingValue($id, $newValue) {
     	$row = $this->find($id);
-    	
-    	$params = array ('settingValue' => $newValue);
-    	$row->update($params);
-//    	$row->save();
+    	$row->settingValue = $newValue;
+    	$row->save();
+    	return;
     }
-
+    
+    public function addSettingValue($userId, $settingId, $settingValue) {
+    	// TODO: Implement addSettingValue
+    }
 }
