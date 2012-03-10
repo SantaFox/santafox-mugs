@@ -1,19 +1,11 @@
 <?php
 /**
- * StarbucksMugs
+ * Плагин контроллера для проверки идентификации и прав пользователя
  *
  * @package		site
  * @subpackage	plugins
  * @copyright	Copyright (c) 2012+ SantaFox
  * @since		1.0 Alpha
- * @version		$Id: AccessControl.php 168 2011-03-07 21:02:02Z santafox $
- */
-
-/**
- * Плагин контроллера для проверки идентификации и прав пользователя
- *
- * @package		site
- * @subpackage	plugins
  */
 class Application_Plugin_AccessControl extends Zend_Controller_Plugin_Abstract {
 

@@ -1,21 +1,13 @@
 <?php
 /**
- * Starbucks Mugs
+ * Модель для таблицы aliases
+ *
+ * Обычный Table Gateway (Martin Fowler), дополнительной логики нет
  *
  * @package		site
  * @subpackage	dbtables
  * @copyright	Copyright (c) 2012+ SantaFox
  * @since		1.0 Alpha
- * @version		$Id: ItemClients.php 178 2011-03-11 18:01:05Z santafox $
- */
-
-/**
- * Модель для таблицы aliases
- *
- * Предназначена для работы со списком синонимов, используемых в системе.
- *
- * @package		site
- * @subpackage	dbtables
  */
 class Application_Model_DbTable_Aliases extends Zend_Db_Table_Abstract {
 

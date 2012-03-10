@@ -1,21 +1,13 @@
 <?php
 /**
- * StarbucksMugs
- *
- * @package		site
- * @subpackage	models
- * @copyright	Copyright (c) 2012+ SantaFox
- * @since		1.0 Alpha
- * @version		$Id: Acl.php 169 2011-03-08 09:01:11Z santafox $
- */
-
-/**
  * Модель для формирования ACL
  *
  * Потенциально позволяет читать ее из базы вместо построения в коде
  *
  * @package		site
- * @subpackage	models
+ * @subpackage	controllers
+ * @copyright	Copyright (c) 2012+ SantaFox
+ * @since		1.0 Alpha
  */
 class Application_Model_Acl {
 

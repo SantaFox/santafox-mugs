@@ -1,19 +1,11 @@
 <?php
 /**
- * StarbucksMugs
+ * Контроллер для администраторских действий
  *
  * @package		site
  * @subpackage	controllers
  * @copyright	Copyright (c) 2012+ SantaFox
  * @since		1.0 Alpha
- * @version		$Id: IndexController.php 168 2011-03-07 21:02:02Z santafox $
- */
-
-/**
- * Контроллер для администраторских действий
- *
- * @package		site
- * @subpackage	controllers
  */
 class AdminController extends Zend_Controller_Action {
 

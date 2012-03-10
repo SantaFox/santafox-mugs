@@ -41,13 +41,14 @@ class Application_Model_DbTable_Settings2Users extends Zend_Db_Table_Abstract {
     }
     
     public function updateSettingValue($id, $newValue) {
-    	$row = $this->find($id);
+    	$rows = $this->find($id);
+    	$row = $rows->current();
     	$row->settingValue = $newValue;
     	$row->save();
     	return;
     }
     
     public function addSettingValue($userId, $settingId, $settingValue) {
-    	// TODO: Implement addSettingValue
+    	// @TODO: Implement addSettingValue
     }
 }

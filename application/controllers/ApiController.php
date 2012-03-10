@@ -1,19 +1,11 @@
 <?php
 /**
- * StarbucksMugs
+ * Контроллер для всех действий AJAX
  *
  * @package		site
  * @subpackage	controllers
  * @copyright	Copyright (c) 2012+ SantaFox
  * @since		1.0 Alpha
- * @version		$Id: ClientsController.php 168 2011-03-07 21:02:02Z santafox $
- */
-
-/**
- * Контроллер для всех действий AJAX
- *
- * @package		site
- * @subpackage	controllers
  */
 class ApiController extends Zend_Controller_Action {
 
@@ -173,8 +165,8 @@ class ApiController extends Zend_Controller_Action {
 	 * настройки пользователя должны иметь значение. Сделано это для того, чтобы при изменении
 	 * дефолтной настройки параметры уже зарегестрированных пользователей не "поехали"
 	 *
-	 * @uses	Application_Model_DbTable_Settings::getUserSettings()
-	 * @uses	Application_Model_DbTable_Settings::setUserSetting()
+	 * @uses	Application_Model_Settings::getUserSettings()
+	 * @uses	Application_Model_Settings::setUserSetting()
 	 *
 	 * @return	array	Стандартный объект с полями status (success/fail) и message
      */

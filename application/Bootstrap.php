@@ -1,19 +1,11 @@
 <?php
 /**
- * PEKO-M Dashboard
+ * Иницициализации внутренних процессов
  *
- * @package		dashboard
+ * @package		site
  * @subpackage	core
- * @copyright	Copyright (c) 2011+ PEKO-M
+ * @copyright	Copyright (c) 2012+ SantaFox
  * @since		1.0 Alpha
- * @version		$Id: Bootstrap.php 152 2011-03-05 10:51:01Z santafox $
- */
-
-/**
- * Контроллер для операций с партиями
- *
- * @package		dashboard
- * @subpackage	core
  */
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 

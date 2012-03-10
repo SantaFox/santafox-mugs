@@ -1,19 +1,11 @@
 <?php
 /**
- * StarbucksMugs
+ * Контроллер для обработки ошибочных ситуаций
  *
  * @package		site
  * @subpackage	controllers
  * @copyright	Copyright (c) 2012+ SantaFox
  * @since		1.0 Alpha
- * @version		$Id: ErrorController.php 168 2011-03-07 21:02:02Z santafox $
- */
-
-/**
- * Контроллер для обработки ошибочных ситуаций
- *
- * @package		dashboard
- * @subpackage	controllers
  * @todo		Разобраться, что здесь что!!!!!! И зачем?????
  */
 class ErrorController extends Zend_Controller_Action {

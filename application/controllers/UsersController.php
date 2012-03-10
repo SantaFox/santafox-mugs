@@ -1,19 +1,11 @@
 <?php
 /**
- * StarbucksMugs
+ * Контроллер для обработки действий по авторизации
  *
  * @package		site
  * @subpackage	controllers
  * @copyright	Copyright (c) 2012+ SantaFox
  * @since		1.0 Alpha
- * @version		$Id: LoginController.php 152 2011-03-05 10:51:01Z santafox $
- */
-
-/**
- * Контроллер для обработки действий по авторизации
- *
- * @package		site
- * @subpackage	controllers
  */
 class UsersController extends Zend_Controller_Action {
 
