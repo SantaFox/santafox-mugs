@@ -1,0 +1,8 @@
+source:
+	- /Applications/MAMP/htdocs/application/
+	- /Applications/MAMP/htdocs/library/Zend
+skipDocPrefix:	Zend
+destination:	/Applications/MAMP/htdocs/docs
+debug:			yes
+todo:			yes
+deprecated:		yes
