@@ -1,15 +1,5 @@
 <?php
 /**
- * Starbucks Mugs
- *
- * @package		site
- * @subpackage	dbtables
- * @copyright	Copyright (c) 2011+ PEKO-M
- * @since		1.0 Beta
- * @version		$Id: Log.php 160 2011-03-05 17:13:00Z santafox $
- */
-
-/**
  * Модель для таблицы log
  *
  * Предназначена для записи в базу действий пользователей, связанных с изменение данных базы.
@@ -17,6 +7,8 @@
  *
  * @package		site
  * @subpackage	dbtables
+ * @copyright	Copyright (c) 2012+ SantaFox
+ * @since		1.0 Alpha
  */
 class Application_Model_DbTable_Log extends Zend_Db_Table_Abstract {
 

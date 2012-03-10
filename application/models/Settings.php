@@ -1,15 +1,5 @@
 <?php
 /**
- * StarbucksMugs
- *
- * @package		site
- * @subpackage	models
- * @copyright	Copyright (c) 2012+ SantaFox
- * @since		1.0 Alpha
- * @version		$Id$
- */
-
-/**
  * Модель для работы с настройками пользователя
  *
  * Данная модель является более высоким уровнем для соответствующей модели по работа с соответствующими таблицами базы данных.
@@ -17,6 +7,8 @@
  *
  * @package		site
  * @subpackage	models
+ * @copyright	Copyright (c) 2012+ SantaFox
+ * @since		1.0 Alpha
  */
 class Application_Model_Settings {
 

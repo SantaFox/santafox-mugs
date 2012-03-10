@@ -1,21 +1,13 @@
 <?php
 /**
- * Starbucks Mugs
- *
- * @package		site
- * @subpackage	dbtables
- * @copyright	Copyright (c) 2012+ SantaFox
- * @since		1.0 Alpha
- * @version		$Id: ItemClients.php 178 2011-03-11 18:01:05Z santafox $
- */
-
-/**
  * Модель для таблицы series
  *
  * Предназначена для работы со списком серий, используемых в системе.
  *
  * @package		site
  * @subpackage	dbtables
+ * @copyright	Copyright (c) 2012+ SantaFox
+ * @since		1.0 Alpha
  */
 class Application_Model_DbTable_Series extends Zend_Db_Table_Abstract {
 

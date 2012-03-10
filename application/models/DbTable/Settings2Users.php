@@ -1,21 +1,13 @@
 <?php
 /**
- * Starbucks Mugs
- *
- * @package		site
- * @subpackage	dbtables
- * @copyright	Copyright (c) 2011+ PEKO-M
- * @since		1.0 Release
- * @version		$Id: UserPrefs.php 165 2011-03-07 18:07:22Z santafox $
- */
-
-/**
  * Модель для таблицы settings2users
  *
  * Обычный Table Gateway (Martin Fowler), дополнительная логика по минимуму
  *
  * @package		site
  * @subpackage	dbtables
+ * @copyright	Copyright (c) 2012+ SantaFox
+ * @since		1.0 Alpha
  */
 class Application_Model_DbTable_Settings2Users extends Zend_Db_Table_Abstract {
 
