@@ -168,10 +168,12 @@ function ReloadMugs() {
     $.getJSON('api/mugs', { countryId: selectedCountry }, function(data) {
     	$('#mugsList').empty();
 		$.each(data, function() {
+			if ( userShowOnlyOwnMugs && this.mugUserStatus == null ) return;
 			var li = $("<li>");
 			li.text(this.countryName + ' - ' + this.serieName + ' - ' + this.mugName)
 			  .data('id', this.id);
 			if ( userLoggedIn && this.mugUserStatus == null ) li.css('color', 'gray');
+			if ( userLoggedIn && this.mugUserStatus != null ) li.text(li.text() + ' (' + this.mugUserStatus + ')')
 			li.appendTo('#mugsList');  
 		});
 	});
