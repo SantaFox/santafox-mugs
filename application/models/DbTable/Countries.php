@@ -23,14 +23,15 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
      * Получение списка стран для облака
      *
      * Используется для получения списка стран с количество кружек, при
-     * возможной фильтрации по пользователю и/или серии. Страны с количеством кружек = 0
-     * не возвращаются.
+     * возможной фильтрации по пользователю и/или серии. Всегда возвращается полный список стран
+     * Если пользователь не указан, то в столбце mugsUserCount возвращается NULL
      *
      * Возвращаются только необходимые поля:
      * <ul>
      * <li>id</li>
      * <li>countryName</li>
-     * <li>mugsCount</li>
+     * <li>mugsCountryCount</li>
+     * <li>mugsUserCount</li>
      * </ul>
 	 *
 	 * @param	null|string	$userId		id пользователя для фильтрации
@@ -53,7 +54,8 @@ class Application_Model_DbTable_Countries extends Zend_Db_Table_Abstract {
         	$select->joinLeft('mugs2users',
         				  'mugs.id = mugs2users.mugId AND mugs2users.mugUserId = ' . $userId,
         				  array('mugsUserCount' => 'COUNT(mugs2users.id)') );
-            $select->having('mugsUserCount > 0');
+        } else {
+        	$select->columns(array('mugsUserCount' => 'NULL'));
         }
 
         if ($serieId != '') {

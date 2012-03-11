@@ -53,10 +53,9 @@ class Application_Model_DbTable_Mugs extends Zend_Db_Table_Abstract {
     				   ->order(array('countryName', 'serieName', 'mugName'));
         
         if ($userId != '') {
-        	$select->join('mugs2users',
-        				  'mugs.id = mugs2users.mugId',
-        				  array() );
-            $select->where('mugUserId = ?', (int)$userId);
+			$select->joinLeft('mugs2users',
+					  		  'mugs.id = mugs2users.mugId AND mugs2users.mugUserId = ' . $userId,
+					  array('mugUserStatus' => 'mugStatus') );
         }
 
         if ($countryId != '') {

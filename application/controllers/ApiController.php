@@ -45,15 +45,7 @@ class ApiController extends Zend_Controller_Action {
         $auth = Zend_Auth::getInstance();
         if ( $auth->hasIdentity() ) {
         	$userId = $auth->getIdentity()->id;
-        	$settingsModel = new Application_Model_Settings();
-        	$settingShowOnlyOwnMugs = $settingsModel->getUserSetting($userId, 'ShowOnlyOwnMugs');
-        	$settingShowMugsCount = $settingsModel->getUserSetting($userId, 'ShowMugsCount');
-
-        	if ( $settingShowOnlyOwnMugs == 'TRUE' ) {
-        		$result = $countriesTable->getCountriesCloud($userId);
-        	} else {
-        		$result = $countriesTable->getCountriesCloud();
-        	}
+        	$result = $countriesTable->getCountriesCloud($userId);
         } else {
         	$result = $countriesTable->getCountriesCloud();
     	}
@@ -140,14 +132,7 @@ class ApiController extends Zend_Controller_Action {
         $auth = Zend_Auth::getInstance();
         if ( $auth->hasIdentity() ) {
         	$userId = $auth->getIdentity()->id;
-        	$settingsModel = new Application_Model_Settings();
-        	$settingShowOnlyOwnMugs = $settingsModel->getUserSetting($userId, 'ShowOnlyOwnMugs');
-
-        	if ( $settingShowOnlyOwnMugs == 'TRUE' ) {
-        		$result = $mugsTable->getMugsList($countryId, $serieId, $userId);
-        	} else {
-        		$result = $mugsTable->getMugsList($countryId, $serieId);
-        	}
+        	$result = $mugsTable->getMugsList($countryId, $serieId, $userId);
         } else {
         	$result = $mugsTable->getMugsList($countryId, $serieId);
     	}

@@ -86,20 +86,46 @@ $(function() {
 	// We don't load mugs list on initialization because of it's length
 });
 
-function ReloadCountries() {	
-	// Запрашиваем список стран с количествами кружек
+function ReloadCountries() {
+	// Сначала разбираемся с настройками пользователя, если он есть
+	var userShowOnlyOwnMugs;
+	var userShowMugsCount;
+	var userLoggedIn = ($('#userSettings').length == 1);
+	
+	if ( userLoggedIn ) {
+		userShowOnlyOwnMugs = $('#userShowOnlyOwnMugs').is(':checked');
+		userShowMugsCount = $('#userShowMugsCount').is(':checked');
+	} else {
+		userShowOnlyOwnMugs = false;
+		userShowMugsCount = false;
+	}
+
+	// Запрашиваем список стран с количествами кружек. Сервер отдает список в двух вариантах
+	// 1. Если пользователя нет, то возвращается список всех стран с количеством кружек в них
+	// 2. Если пользователь есть, то возвращается список всех стран с количеством кружек в них и у пользователя
+	// Как следствие, иногда надо пропускать кружки. Делаем это для mugsUserCount == 0
+	// Кстати, незачем городить огород и возвращать этот столбец, если нет пользователя
     $.getJSON("api/countries", function(data) {
     	$('#countriesList').empty();
-		$.each(data, function() { 
+		$.each(data, function() {
+			if ( userShowOnlyOwnMugs && this.mugsUserCount == 0 ) return;
 			var li = $("<li>");
-			if ( 0 == $('#userSettings').length ) {
-				// Пользователя нет - список обычный
-				li.text(this.countryName);
-				li.data('mugsCount', this.mugsCountryCount);
-			} else {
+			if ( userShowOnlyOwnMugs && userShowMugsCount ) {
+				// userShowOnlyOwnMugs checked on server so we get a shortlist here
 				li.text(this.countryName + ' (' + this.mugsUserCount + '/' + this.mugsCountryCount + ')');
 				li.data('mugsCount', this.mugsUserCount)
+			} else if ( userShowOnlyOwnMugs && !userShowMugsCount) {
+				// userShowOnlyOwnMugs checked on server so we get a shortlist here
+				li.text(this.countryName);
+				li.data('mugsCount', this.mugsUserCount);
+			} else if ( !userShowOnlyOwnMugs && userShowMugsCount) {
+				li.text(this.countryName + ' (' + this.mugsUserCount + '/' + this.mugsCountryCount + ')');
+				li.data('mugsCount', this.mugsCountryCount)
+			} else {
+				li.text(this.countryName);
+				li.data('mugsCount', this.mugsCountryCount)
 			}
+			if ( userLoggedIn && this.mugsUserCount == 0 ) li.css('color', 'gray');
 			li.data('id', this.id);
 			li.appendTo('#countriesList');
 		});
@@ -124,13 +150,29 @@ function ReloadSeries() {
 function ReloadMugs() {
 	var selectedCountry = $('#countriesCloud').data('selected') || '';
 
+	// Сначала разбираемся с настройками пользователя, если он есть
+	// TODO: Почистить, если не используется
+	var userShowOnlyOwnMugs;
+	var userShowMugsCount;
+	var userLoggedIn = ($('#userSettings').length == 1);
+	
+	if ( userLoggedIn ) {
+		userShowOnlyOwnMugs = $('#userShowOnlyOwnMugs').is(':checked');
+		userShowMugsCount = $('#userShowMugsCount').is(':checked');
+	} else {
+		userShowOnlyOwnMugs = false;
+		userShowMugsCount = false;
+	}
+
 	// Запрашиваем список кружек
     $.getJSON('api/mugs', { countryId: selectedCountry }, function(data) {
     	$('#mugsList').empty();
-		$.each(data, function() { 
-			$("<li>").text(this.countryName + ' - ' + this.serieName + ' - ' + this.mugName)
-					 .data('id', this.id)
-					 .appendTo('#mugsList');  
+		$.each(data, function() {
+			var li = $("<li>");
+			li.text(this.countryName + ' - ' + this.serieName + ' - ' + this.mugName)
+			  .data('id', this.id);
+			if ( userLoggedIn && this.mugUserStatus == null ) li.css('color', 'gray');
+			li.appendTo('#mugsList');  
 		});
 	});
 }
