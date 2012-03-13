@@ -19,19 +19,43 @@ body {
 #content {
   	margin: 0 auto;/* center the page in Firefox */
   	text-align: left;
-	padding: 200px 20px 20px 20px;
+	padding: 270px 20px 20px 20px;
 }
+
+/* @group countriesCloud */
 
 #countriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left;}  
 #countriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
 #countriesCloud ul { list-style-type:none; margin:0; padding:0; }  
-#countriesCloud ul li { float:left; margin:0 10px; height:35px; cursor: pointer; }  
+#countriesCloud ul li { float:left; margin:0 10px; height:35px; cursor: pointer; }
+
+/* @end */
+
+/* @group seriesCloud */
 
 #seriesCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left;}  
 #seriesCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
 #seriesCloud ul { list-style-type:none; margin:0; padding:0; }  
-#seriesCloud ul li { float:left; margin:0 10px; height:35px; cursor: pointer; }  
+#seriesCloud ul li { float:left; margin:0 10px; height:35px; cursor: pointer; }
+
+/* @end */
+
+/* @group mugsCloud */
 
 #mugsCloud { width:30%; text-align:center; padding:5px; overflow:auto; float:left; }  
 #mugsCloud h2 { font-size:2.5em; margin:0 0 10px 0; padding:15px 0 15px 80px; }
 #mugsCloud ul li { text-align: left; cursor: pointer; }
+
+/* @end */
+
+/* @group list4 */
+
+#list4 { width:320px; font-family:Georgia, Times, serif; font-size:15px; }
+#list4 ul { list-style: none; }
+#list4 ul li { }
+#list4 ul li a { display:block; text-decoration:none; color:#000000; background-color:#FFFFFF; line-height:30px;
+  border-bottom-style:solid; border-bottom-width:1px; border-bottom-color:#CCCCCC; padding-left:10px; cursor:pointer; }
+#list4 ul li a:hover { color:#FFFFFF; background-image:url(../images/hover.png); background-repeat:repeat-x; }
+#list4 ul li a strong { margin-right:10px; }
+
+/* @end */
